@@ -68,3 +68,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+**TypeError: this.getOptions is not a function**
+
+**reasons：** less-loader安装的版本过高
+**solve：** 1.npm uninstall less-loader 2.npm install less-loader@6.0.0
