@@ -1,5 +1,6 @@
-import './App.less';
-import Login from './pages/Login'
+import "@/App.less";
+import { hot } from "react-hot-loader/root";
+import Login from "@/pages/Login";
 
 function App() {
   return (
@@ -9,4 +10,4 @@ function App() {
   );
 }
 
-export default App;
+export default process.env.NODE_ENV === "development" ? hot(App) : App;

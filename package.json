@@ -52,6 +52,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^17.0.37"
+    "@types/react": "^17.0.37",
+    "react-app-rewire-hot-loader": "^2.0.1",
+    "react-hot-loader": "^4.13.0"
   }
 }
