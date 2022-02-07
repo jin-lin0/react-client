@@ -26,7 +26,7 @@ const Login = () => {
         <Form>
           <Space direction="vertical">
             <Input placeholder="User" />
-            <Input placeholder="Password" type="password" />
+            <Input.Password placeholder="Password" />
             <Button type="primary" className="login-button">
               Login
             </Button>

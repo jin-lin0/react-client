@@ -12,9 +12,12 @@ const AntdDayjsWebpackPlugin = require("antd-dayjs-webpack-plugin");
 module.exports = override(
   addWebpackAlias({
     ["@"]: path.join(__dirname, "./src"),
+    ["@pages"]: path.join(__dirname, "./src/pages"),
     ["@components"]: path.join(__dirname, "./src/components"),
     ["@api"]: path.join(__dirname, "./src/api"),
     ["@utils"]: path.join(__dirname, "./src/utils"),
+    ["@route"]: path.join(__dirname, "./src/route"),
+    ["@const"]: path.join(__dirname, "./src/const"),
   }),
   fixBabelImports("import", {
     libraryName: "antd",
