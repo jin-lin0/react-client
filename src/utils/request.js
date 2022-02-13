@@ -3,7 +3,7 @@ import axios from "axios";
 
 const instance = axios.create({
   timeout: 5000,
-  baseURL: "/api/chat",
+  baseURL: "/chatApi",
 });
 
 /**
@@ -30,7 +30,13 @@ instance.interceptors.response.use(
   }
 );
 
-export const request = ({ url, method = "GET", params, config, raw }) => {
+export const request = ({
+  url,
+  method = "GET",
+  params = {},
+  config = {},
+  raw = true,
+}) => {
   const configParams = { method: method.toLowerCase(), url, ...config };
   method.toLocaleUpperCase() === "GET"
     ? (configParams.params = params)

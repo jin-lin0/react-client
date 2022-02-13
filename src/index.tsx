@@ -1,7 +1,15 @@
 import ReactDOM from "react-dom";
+import { useRoutes } from "react-router";
+import { BrowserRouter } from "react-router-dom";
 import routeList from "@/route";
-import CRoute from "@components/CRoute";
 import "./index.css";
 import "normalize.css";
 
-ReactDOM.render(CRoute(routeList), document.getElementById("root"));
+const App = () => useRoutes(routeList);
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
