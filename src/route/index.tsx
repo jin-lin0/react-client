@@ -3,9 +3,9 @@ import Register from "@/pages/Register";
 import Login from "@pages/Login";
 
 const routes = [
-  { path: "/Login", element: <Login /> },
-  { path: "/Register", element: <Register /> },
-  { path: "/Home", element: <Home /> },
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+  { path: "/home", element: <Home /> },
   { path: "/", element: <Login /> },
 ];
 

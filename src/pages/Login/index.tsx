@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Form, Input, Space } from "antd";
+import { Button, Form, Input } from "antd";
 import { request } from "@/utils/request";
 import io from "socket.io-client";
 import { SOCKET_OPTIONS, SOCKET_URL } from "../../const/config";
@@ -21,33 +21,42 @@ const Login = () => {
   //     })
   // }, []);
 
-  const handleLogin = async () => {
+  const handleLogin = async (values) => {
     const data = await request({
-      url: "http://localhost:5555/chatApi/user/findAll",
-      method: "GET",
+      url: "http://localhost:5555/chatApi/user/login",
+      method: "POST",
+      params: values,
     });
-    console.log(data);
+    console.log(data, values);
   };
 
   return (
     <div className="login">
       <section className="login-container">
-        <h1>Welcome</h1>
-        <Form>
-          <Space direction="vertical">
-            <Input placeholder="User" />
+        <h1>欢迎</h1>
+        <Form onFinish={handleLogin} labelCol={{ span: 5 }}>
+          <Form.Item
+            name="username"
+            label="账号"
+            rules={[{ required: true, message: "请输入账号" }]}
+          >
+            <Input placeholder="Account" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="密码"
+            rules={[{ required: true, message: "请输入密码" }]}
+          >
             <Input.Password placeholder="Password" />
-            <Button
-              type="primary"
-              className="login-button"
-              onClick={handleLogin}
-            >
-              Login
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" className="login-button">
+              登录
             </Button>
-            <Link to="/register">
-              <span className="register">Register</span>
-            </Link>
-          </Space>
+          </Form.Item>
+          <Link to="/register">
+            <span className="registerText">去注册</span>
+          </Link>
         </Form>
       </section>
     </div>
