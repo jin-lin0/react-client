@@ -34,20 +34,12 @@ const Login = () => {
     <div className="login">
       <section className="login-container">
         <h1>欢迎</h1>
-        <Form onFinish={handleLogin} labelCol={{ span: 5 }}>
-          <Form.Item
-            name="username"
-            label="账号"
-            rules={[{ required: true, message: "请输入账号" }]}
-          >
-            <Input placeholder="Account" />
+        <Form onFinish={handleLogin}>
+          <Form.Item name="phone_number">
+            <Input placeholder="请输入手机号" bordered={false} />
           </Form.Item>
-          <Form.Item
-            name="password"
-            label="密码"
-            rules={[{ required: true, message: "请输入密码" }]}
-          >
-            <Input.Password placeholder="Password" />
+          <Form.Item name="password">
+            <Input.Password placeholder="请输入密码" bordered={false} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="login-button">

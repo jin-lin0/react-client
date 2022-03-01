@@ -4,8 +4,8 @@ import { request } from "@/utils/request";
 import "./index.less";
 import { Link } from "react-router-dom";
 
-const Register = (values) => {
-  const handleRegister = async () => {
+const Register = () => {
+  const handleRegister = async (values) => {
     const data = await request({
       url: "http://localhost:5555/chatApi/user/register",
       method: "POST",
@@ -18,20 +18,15 @@ const Register = (values) => {
     <div className="register">
       <section className="register-container">
         <h1>注册</h1>
-        <Form onFinish={handleRegister} labelCol={{ span: 5 }}>
-          <Form.Item
-            name="username"
-            label="账号"
-            rules={[{ required: true, message: "请输入账号" }]}
-          >
-            <Input placeholder="Account" />
+        <Form onFinish={handleRegister} colon={false} requiredMark={false}>
+          <Form.Item name="phone_number">
+            <Input placeholder="请输入手机号" bordered={false} />
           </Form.Item>
-          <Form.Item
-            name="password"
-            label="密码"
-            rules={[{ required: true, message: "请输入密码" }]}
-          >
-            <Input.Password placeholder="Password" />
+          <Form.Item name="password">
+            <Input.Password placeholder="请输入密码" bordered={false} />
+          </Form.Item>
+          <Form.Item name="confirm_password">
+            <Input.Password placeholder="请确认密码" bordered={false} />
           </Form.Item>
           <Form.Item>
             <Button
