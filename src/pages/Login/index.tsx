@@ -1,32 +1,11 @@
-import React, { useEffect } from "react";
 import { Button, Form, Input } from "antd";
-import { request } from "@/utils/request";
-import io from "socket.io-client";
-import { SOCKET_OPTIONS, SOCKET_URL } from "../../const/config";
-import "./index.less";
 import { Link } from "react-router-dom";
-
-// const socket = io(SOCKET_URL, SOCKET_OPTIONS);
+import Api from "@/api";
+import "./index.less";
 
 const Login = () => {
-  // useEffect(() => {
-  //     socket.on('connect', () => {
-  //         console.log(socket.io);
-  //     })
-  //     socket.on('disconnect', reason => {
-  //         console.log(reason)
-  //         if (reason === 'io server disconnect') {
-  //             socket.connect();
-  //         }
-  //     })
-  // }, []);
-
   const handleLogin = async (values) => {
-    const data = await request({
-      url: "http://localhost:5555/chatApi/user/login",
-      method: "POST",
-      params: values,
-    });
+    const data = await Api.login(values);
     console.log(data, values);
   };
 

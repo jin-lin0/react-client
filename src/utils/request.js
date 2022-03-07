@@ -3,7 +3,7 @@ import axios from "axios";
 
 const instance = axios.create({
   timeout: 5000,
-  baseURL: "/chatApi",
+  baseURL: "http://localhost:5555/chatApi",
 });
 
 /**
