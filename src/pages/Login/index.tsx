@@ -15,7 +15,11 @@ const Login = () => {
         <h1>欢迎</h1>
         <Form onFinish={handleLogin}>
           <Form.Item name="phone_number">
-            <Input placeholder="请输入手机号" bordered={false} />
+            <Input
+              placeholder="请输入手机号"
+              bordered={false}
+              autoComplete="off"
+            />
           </Form.Item>
           <Form.Item name="password">
             <Input.Password placeholder="请输入密码" bordered={false} />

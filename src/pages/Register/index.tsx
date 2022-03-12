@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
-import { Button, Form, Input } from "antd";
-import { request } from "@/utils/request";
+import { Button, Form, Input, message } from "antd";
 import "./index.less";
 import { Link } from "react-router-dom";
+import Api from "@/api";
 
 const Register = () => {
   const handleRegister = async (values) => {
-    const data = await request({
-      url: "http://localhost:5555/chatApi/user/register",
-      method: "POST",
-      params: values,
-    });
-    console.log(data, values);
+    const { phone_number, password, confirm_password } = values;
+    if (password !== confirm_password) {
+      message.error("密码与重新设置的密码不一致！");
+    } else {
+      const data = await Api.register(values);
+      message.success("注册成功！");
+    }
   };
 
   return (
@@ -20,13 +21,17 @@ const Register = () => {
         <h1>注册</h1>
         <Form onFinish={handleRegister} colon={false} requiredMark={false}>
           <Form.Item name="phone_number">
-            <Input placeholder="请输入手机号" bordered={false} />
+            <Input
+              placeholder="请输入手机号"
+              bordered={false}
+              autoComplete="off"
+            />
           </Form.Item>
           <Form.Item name="password">
             <Input.Password placeholder="请输入密码" bordered={false} />
           </Form.Item>
           <Form.Item name="confirm_password">
-            <Input.Password placeholder="请确认密码" bordered={false} />
+            <Input.Password placeholder="请重新输入密码" bordered={false} />
           </Form.Item>
           <Form.Item>
             <Button
