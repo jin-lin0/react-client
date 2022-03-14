@@ -1,17 +1,31 @@
-import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input, message } from "antd";
-import "./index.less";
-import { Link } from "react-router-dom";
 import Api from "@/api";
+import Regex from "@/utils/regex";
+import Feature from "@/utils/feature";
+import "./index.less";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const handleRegister = async (values) => {
     const { phone_number, password, confirm_password } = values;
-    if (password !== confirm_password) {
-      message.error("密码与重新设置的密码不一致！");
-    } else {
-      const data = await Api.register(values);
-      message.success("注册成功！");
+    const validateCon = [
+      password === confirm_password,
+      Regex.phoneNumber.test(phone_number),
+      Regex.password.test(password),
+    ];
+    const validateMsg = [
+      "密码与重新设置的密码不一致!",
+      "请输入正确的手机号格式!",
+      "密码中需包含字母、数字，长度8至16位!",
+    ];
+    if (Feature.handleValidate(validateCon, validateMsg)) {
+      const data = await Api.register({ phone_number, password });
+      if (data) {
+        message.success("注册成功！");
+        navigate("/login", { replace: true });
+      }
     }
   };
 

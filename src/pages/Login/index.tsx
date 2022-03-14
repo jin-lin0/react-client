@@ -1,12 +1,29 @@
 import { Button, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Api from "@/api";
+import Regex from "@/utils/regex";
+import Feature from "@/utils/feature";
 import "./index.less";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const handleLogin = async (values) => {
-    const data = await Api.login(values);
-    console.log(data, values);
+    const { phone_number, password } = values;
+    const validateCon = [
+      Regex.phoneNumber.test(phone_number),
+      Regex.password.test(password),
+    ];
+    const validateMsg = [
+      "请输入正确的手机号格式!",
+      "密码中需包含字母、数字，长度8至16位!",
+    ];
+    if (Feature.handleValidate(validateCon, validateMsg)) {
+      const data = await Api.login(values);
+      if (data) {
+        navigate("/home", { replace: true });
+      }
+    }
   };
 
   return (

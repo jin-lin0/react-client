@@ -5,7 +5,7 @@ interface LoginInfo {
   password: String;
 }
 
-type RegisterInfo = LoginInfo & { confirm_password: String };
+type RegisterInfo = LoginInfo;
 
 const Api = {
   login: (LoginInfo: LoginInfo) =>

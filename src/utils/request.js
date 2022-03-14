@@ -23,6 +23,9 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
   (res) => {
+    if (res.data.code && res.data.code !== 0) {
+      message.error(res.data.msg);
+    }
     return res;
   },
   (err) => {
@@ -35,7 +38,7 @@ export const request = ({
   method = "GET",
   params = {},
   config = {},
-  raw = true,
+  raw = false,
 }) => {
   const configParams = { method: method.toLowerCase(), url, ...config };
   method.toLocaleUpperCase() === "GET"
@@ -45,11 +48,8 @@ export const request = ({
     .then((payload) => payload.data)
     .then(
       (payload) => {
-        if (!payload.code) {
+        if (!payload.code || payload.code === 0) {
           return raw ? payload : payload.data;
-        } else {
-          message.error(payload.msg);
-          throw new Error(payload.msg);
         }
       },
       (err) => {
