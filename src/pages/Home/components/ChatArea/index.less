@@ -1,11 +1,62 @@
+@bgColor: #5143886b;
+@hoverColor: #b196df;
+@footerColor: #4b4176;
+
 .chat-area {
   position: relative;
-  padding: 1rem;
-  background-color: #5143886b;
+  display: grid;
+  grid-template-rows: 50px auto 24%;
+  background-color: @bgColor;
   color: #fff;
   header {
+    padding: 1rem;
     display: flex;
     font-size: 1.2rem;
     font-weight: 600;
+  }
+  footer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: @footerColor;
+    textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      color: #fff;
+      &::-webkit-scrollbar {
+        width: 0.1rem;
+        &-thumb {
+          border-radius: 0.1rem;
+          background-color: @hoverColor;
+        }
+      }
+    }
+  }
+
+  &-panel {
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  &-sendButton {
+    padding: 0.2rem 0.6rem;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: inline-block;
+    border: 1px groove @hoverColor;
+    border-radius: 10%;
+    font-weight: 700;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    background-color: transparent;
+    &:hover {
+      background-color: @hoverColor;
+    }
   }
 }
