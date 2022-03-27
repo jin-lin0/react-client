@@ -6,9 +6,6 @@ const instance = axios.create({
   baseURL: "http://localhost:5555/chatApi",
 });
 
-/**
- * Request Interception
- */
 instance.interceptors.request.use(
   (config) => {
     return config;
@@ -18,9 +15,6 @@ instance.interceptors.request.use(
   }
 );
 
-/**
- * Response Interception
- */
 instance.interceptors.response.use(
   (res) => {
     if (res.data.code && res.data.code !== 0) {

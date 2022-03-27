@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import Api from "@/api";
 import Regex from "@/utils/regex";
@@ -21,6 +21,7 @@ const Login = () => {
     if (Feature.handleValidate(validateCon, validateMsg)) {
       const data = await Api.login(values);
       if (data) {
+        message.success("登录成功");
         navigate("/home", { replace: true });
       }
     }

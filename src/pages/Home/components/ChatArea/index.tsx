@@ -5,7 +5,14 @@ import "./index.less";
 const ChatArea = () => {
   return (
     <div className="chat-area">
-      <Input placeholder="请输入" />
+      <header>
+        <img src="" alt="" className="avator" />
+        <div className="nickname">王成</div>
+      </header>
+      area
+      <footer className="chat-area-input">
+        <input type="text" />
+      </footer>
     </div>
   );
 };

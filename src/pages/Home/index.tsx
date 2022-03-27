@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import io from "socket.io-client";
 import { SOCKET_OPTIONS, SOCKET_URL } from "../../const/config";
 import HomeHeader from "./components/HomeHeader";
+import ChatList from "./components/ChatList";
 import ChatArea from "./components/ChatArea";
 import "./index.less";
 
-const socket = io(SOCKET_URL, SOCKET_OPTIONS);
-
 const Home = () => {
+  const socket = io(SOCKET_URL, SOCKET_OPTIONS);
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket.io);
@@ -22,8 +23,10 @@ const Home = () => {
 
   return (
     <div className="home">
-      <HomeHeader />
-      <ChatArea />
+      <div className="home-container">
+        <ChatList />
+        <ChatArea />
+      </div>
     </div>
   );
 };

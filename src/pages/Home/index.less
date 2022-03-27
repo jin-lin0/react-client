@@ -1,0 +1,23 @@
+.home {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: linear-gradient(#91bbff, #3b1756);
+
+  &-container {
+    min-width: 85vw;
+    min-height: 85vh;
+    display: grid;
+    grid-template-columns: 25% 75%;
+    background-color: #3c3265;
+    border-radius: 1rem;
+    box-shadow: 5px 10px 20px;
+    //ipad
+    @media screen and (min-width: 720px) and(max-width:1080px) {
+      grid-template-columns: 35%, 65%;
+    }
+  }
+}
