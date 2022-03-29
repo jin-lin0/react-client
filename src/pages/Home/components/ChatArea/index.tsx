@@ -1,7 +1,8 @@
 import { Popover } from "antd";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Picker from "emoji-picker-react";
 import { SmileOutlined, UploadOutlined } from "@ant-design/icons";
+import { HomeContext } from "@/context";
 import "./index.less";
 import TextArea from "antd/lib/input/TextArea";
 import classNames from "classnames";
@@ -9,7 +10,7 @@ import classNames from "classnames";
 const ChatArea = (props) => {
   const { data } = props;
   const { nickname } = data;
-  const curUserId = "123";
+  const { currentUser } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
   const [listMsg, setListMsg] = useState<any>([]);
@@ -20,7 +21,7 @@ const ChatArea = (props) => {
     return (
       <div
         className={classNames("message-item", {
-          "message-item-self": from === curUserId,
+          "message-item-self": from === currentUser,
         })}
       >
         <pre className="message-item-content">{content}</pre>
@@ -29,7 +30,8 @@ const ChatArea = (props) => {
   };
 
   const HintItem = (props) => {
-    return <div className="hint-item">- 王成 进来了 -</div>;
+    const { nickname } = props;
+    return <div className="hint-item">- {nickname} 进来了 -</div>;
   };
 
   const onEmojiClick = (event, emoji) => {
@@ -52,6 +54,8 @@ const ChatArea = (props) => {
     setMsg("");
   };
 
+  useEffect(() => {}, [nickname]);
+
   return (
     <div className="chat-area">
       <header>
@@ -62,7 +66,6 @@ const ChatArea = (props) => {
         {listMsg.map((msgItem, index) => (
           <MessageItem msgObj={msgItem} key={index} />
         ))}
-        <HintItem />
       </section>
       <footer>
         <div className="chat-area-panel">

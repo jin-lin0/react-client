@@ -24,6 +24,15 @@
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0.1rem;
+      &-thumb {
+        border-radius: 0.1rem;
+        background-color: @hoverColor;
+      }
+    }
 
     .hint-item {
       display: flex;
@@ -38,6 +47,8 @@
         margin: 0;
         font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
           Courier, monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
       }
 
       &-self {
