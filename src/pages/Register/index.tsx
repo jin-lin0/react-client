@@ -9,19 +9,21 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (values) => {
-    const { phone_number, password, confirm_password } = values;
+    const { phone_number, password, confirm_password, nickname } = values;
     const validateCon = [
       password === confirm_password,
       Regex.phoneNumber.test(phone_number),
+      Regex.nickname.test(nickname),
       Regex.password.test(password),
     ];
-    const validateMsg = [
+    const validateErrMsg = [
       "密码与重新设置的密码不一致!",
       "请输入正确的手机号格式!",
-      "密码中需包含字母、数字，长度8至16位!",
+      "昵称的长度应在2至6位！",
+      "密码中需包含字母、数字，长度6至12位!",
     ];
-    if (Feature.handleValidate(validateCon, validateMsg)) {
-      const data = await Api.register({ phone_number, password });
+    if (Feature.handleValidate(validateCon, validateErrMsg)) {
+      const data = await Api.register({ phone_number, password, nickname });
       if (data) {
         message.success("注册成功！");
         navigate("/login", { replace: true });
@@ -41,8 +43,18 @@ const Register = () => {
               autoComplete="off"
             />
           </Form.Item>
+          <Form.Item name="nickname">
+            <Input
+              placeholder="请设置您的昵称(2-6位）"
+              bordered={false}
+              autoComplete="off"
+            />
+          </Form.Item>
           <Form.Item name="password">
-            <Input.Password placeholder="请输入密码" bordered={false} />
+            <Input.Password
+              placeholder="请输入密码(6-12位，包含数字、字母)"
+              bordered={false}
+            />
           </Form.Item>
           <Form.Item name="confirm_password">
             <Input.Password placeholder="请重新输入密码" bordered={false} />

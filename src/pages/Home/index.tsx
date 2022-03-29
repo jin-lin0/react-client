@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { HomeContext } from "@/context";
 import { SOCKET_OPTIONS, SOCKET_URL } from "../../const/config";
 import HomeHeader from "./components/HomeHeader";
 import ChatList from "./components/ChatList";
@@ -8,6 +9,15 @@ import "./index.less";
 
 const Home = () => {
   const socket = io(SOCKET_URL, SOCKET_OPTIONS);
+  const [activeChatIndex, setActiveChatIndex] = useState(0);
+  const [chatList, setChatList] = useState([
+    { nickname: "NickOut" },
+    { nickname: "王思思" },
+  ]);
+
+  const onChoseChat = (activeChat) => {
+    setActiveChatIndex(activeChat);
+  };
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -24,8 +34,10 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-container">
-        <ChatList />
-        <ChatArea />
+        <HomeContext.Provider value={{ currentUser: 1, activeChatIndex }}>
+          <ChatList onChoseChat={onChoseChat} data={chatList} />
+          <ChatArea data={chatList[activeChatIndex]} />
+        </HomeContext.Provider>
       </div>
     </div>
   );

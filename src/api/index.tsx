@@ -3,6 +3,7 @@ import { request } from "@/utils/request";
 interface LoginInfo {
   phone_number: String;
   password: String;
+  nickname: String;
 }
 
 type RegisterInfo = LoginInfo;

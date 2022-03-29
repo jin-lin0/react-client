@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { HomeContext } from "@/context";
 import "./index.less";
 
 const ChatListItem = (props) => {
@@ -18,18 +19,17 @@ const ChatListItem = (props) => {
   );
 };
 
-const ChatList = () => {
-  const [active, setActive] = useState(0);
-  const [listData, setListData] = useState(
-    Array(10).fill({ nickname: "NickOut" })
-  );
+const ChatList = (props) => {
+  const { onChoseChat, data } = props;
+  const { activeChatIndex } = useContext<any>(HomeContext);
   return (
     <div className="chat-list">
-      {listData.map((item, index) => (
+      {data.map((item, index) => (
         <ChatListItem
-          active={active === index}
+          key={index}
+          active={activeChatIndex === index}
           item={item}
-          onClick={() => setActive(index)}
+          onClick={() => onChoseChat(index)}
         />
       ))}
     </div>
