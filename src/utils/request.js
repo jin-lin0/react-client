@@ -1,5 +1,6 @@
 import { message } from "antd";
 import axios from "axios";
+import { LoginToken } from "./token";
 
 const instance = axios.create({
   timeout: 5000,
@@ -8,6 +9,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    const token = LoginToken.get();
+    if (token) {
+      config.headers.Authorization = token;
+    }
     return config;
   },
   (err) => {
@@ -17,8 +22,12 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.code && res.data.code !== 0) {
-      message.error(res.data.msg);
+    const { data } = res;
+    if (data.code && data.code !== 0) {
+      message.error(data.msg);
+    }
+    if (data.token) {
+      LoginToken.save(data.token);
     }
     return res;
   },

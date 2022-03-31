@@ -21,7 +21,7 @@ const ChatArea = (props) => {
     return (
       <div
         className={classNames("message-item", {
-          "message-item-self": from === currentUser,
+          "message-item-self": from === currentUser.phone_number,
         })}
       >
         <pre className="message-item-content">{content}</pre>
@@ -50,7 +50,10 @@ const ChatArea = (props) => {
   const onSendMsg = () => {
     if (msg === "") return;
     console.log(msg);
-    setListMsg((list) => [...list, { from: "123", content: msg }]);
+    setListMsg((list) => [
+      ...list,
+      { from: currentUser.phone_number, content: msg },
+    ]);
     setMsg("");
   };
 
@@ -71,7 +74,9 @@ const ChatArea = (props) => {
         <div className="chat-area-panel">
           <Popover
             trigger="click"
-            content={<Picker onEmojiClick={onEmojiClick} />}
+            content={
+              <Picker onEmojiClick={onEmojiClick} disableSearchBar={true} />
+            }
           >
             <SmileOutlined
               style={{ fontSize: "1.2rem" }}

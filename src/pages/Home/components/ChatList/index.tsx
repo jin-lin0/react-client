@@ -20,7 +20,7 @@ const ChatListItem = (props) => {
 };
 
 const ChatList = (props) => {
-  const { onChoseChat, data } = props;
+  const { onChooseChat, data } = props;
   const { activeChatIndex } = useContext<any>(HomeContext);
   return (
     <div className="chat-list">
@@ -29,7 +29,7 @@ const ChatList = (props) => {
           key={index}
           active={activeChatIndex === index}
           item={item}
-          onClick={() => onChoseChat(index)}
+          onClick={() => onChooseChat(index)}
         />
       ))}
     </div>

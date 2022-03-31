@@ -13,6 +13,7 @@ const Api = {
     request({ url: "/user/login", method: "POST", params: LoginInfo }),
   register: (RegisterInfo: RegisterInfo) =>
     request({ url: "/user/register", method: "POST", params: RegisterInfo }),
+  getInfo: () => request({ url: "/user/getInfo", method: "GET" }),
 };
 
 export default Api;

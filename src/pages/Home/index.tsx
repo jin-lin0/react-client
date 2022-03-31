@@ -8,28 +8,32 @@ import ChatArea from "./components/ChatArea";
 import { LogoutOutlined } from "@ant-design/icons";
 import "./index.less";
 import { useNavigate } from "react-router-dom";
+import { LoginToken } from "@/utils/token";
+import Api from "@/api";
 
 const Home = () => {
   const socket = io(SOCKET_URL, SOCKET_OPTIONS);
   const navigate = useNavigate();
+  const [curUser, setCurUser] = useState({});
   const [activeChatIndex, setActiveChatIndex] = useState(0);
   const [chatList, setChatList] = useState([
     { nickname: "NickOut" },
     { nickname: "王思思" },
   ]);
 
-  const onChoseChat = (activeChat) => {
+  const onChooseChat = (activeChat) => {
     setActiveChatIndex(activeChat);
   };
 
   const handleLogout = () => {
     navigate("/login", { replace: true });
+    LoginToken.delete();
     socket.disconnect();
   };
 
   useEffect(() => {
     socket.on("connect", () => {
-      console.log(socket.io);
+      console.log(socket);
     });
     socket.on("disconnect", (reason) => {
       console.log(reason);
@@ -37,15 +41,21 @@ const Home = () => {
         socket.connect();
       }
     });
+    const fetchData = async () => {
+      const user = await Api.getInfo();
+      setCurUser(user);
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div className="home">
       <div className="home-container">
         <HomeContext.Provider
-          value={{ currentUser: "123", activeChatIndex, socket }}
+          value={{ currentUser: curUser, activeChatIndex, socket }}
         >
-          <ChatList onChoseChat={onChoseChat} data={chatList} />
+          <ChatList onChooseChat={onChooseChat} data={chatList} />
           <ChatArea data={chatList[activeChatIndex]} />
         </HomeContext.Provider>
       </div>
