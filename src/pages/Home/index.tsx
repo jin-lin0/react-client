@@ -6,10 +6,10 @@ import HomeHeader from "./components/HomeHeader";
 import ChatList from "./components/ChatList";
 import ChatArea from "./components/ChatArea";
 import { LogoutOutlined } from "@ant-design/icons";
-import "./index.less";
 import { useNavigate } from "react-router-dom";
 import { LoginToken } from "@/utils/token";
 import Api from "@/api";
+import "./index.less";
 
 const Home = () => {
   const socket = io(SOCKET_URL, SOCKET_OPTIONS);

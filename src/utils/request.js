@@ -24,6 +24,11 @@ instance.interceptors.response.use(
   (res) => {
     const { data } = res;
     if (data.code && data.code !== 0) {
+      switch (data.code) {
+        case 1005:
+          window.location.replace("/login");
+          break;
+      }
       message.error(data.msg);
     }
     if (data.token) {
