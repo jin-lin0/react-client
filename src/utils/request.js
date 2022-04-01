@@ -29,6 +29,8 @@ instance.interceptors.response.use(
         case 1005:
           window.location.replace("/login");
           break;
+        default:
+          break;
       }
       message.error(data.msg);
     }
