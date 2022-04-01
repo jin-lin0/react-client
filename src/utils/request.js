@@ -25,6 +25,7 @@ instance.interceptors.response.use(
     const { data } = res;
     if (data.code && data.code !== 0) {
       switch (data.code) {
+        case 1004:
         case 1005:
           window.location.replace("/login");
           break;

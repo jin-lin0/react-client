@@ -34,6 +34,9 @@ const Home = () => {
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket);
+      Api.getInfo().then((userInfo) => {
+        socket.emit("online", userInfo);
+      });
     });
     socket.on("disconnect", (reason) => {
       console.log(reason);
