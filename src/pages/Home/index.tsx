@@ -54,14 +54,15 @@ const Home = () => {
 
   return (
     <div className="home">
-      <div className="home-container">
-        <HomeContext.Provider
-          value={{ currentUser: curUser, activeChatIndex, socket }}
-        >
+      <HomeContext.Provider
+        value={{ currentUser: curUser, activeChatIndex, socket }}
+      >
+        <HomeHeader />
+        <div className="home-container">
           <ChatList onChooseChat={onChooseChat} data={chatList} />
           <ChatArea data={chatList[activeChatIndex]} />
-        </HomeContext.Provider>
-      </div>
+        </div>
+      </HomeContext.Provider>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>
   );

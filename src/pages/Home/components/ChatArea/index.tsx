@@ -57,7 +57,9 @@ const ChatArea = (props) => {
     setMsg("");
   };
 
-  useEffect(() => {}, [nickname]);
+  useEffect(() => {
+    setListMsg([]);
+  }, [nickname]);
 
   return (
     <div className="chat-area">
