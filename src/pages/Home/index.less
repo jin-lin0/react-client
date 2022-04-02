@@ -1,3 +1,6 @@
+@footerColor: #4b4176;
+@bgColor: #5143886b;
+
 .home {
   min-width: 100vw;
   min-height: 100vh;
@@ -30,6 +33,30 @@
     font-size: 1.5rem;
     color: #3b1756;
     cursor: pointer;
+  }
+}
+
+.modal-addFriend-item {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 2rem;
+    border-radius: 50%;
+  }
+  &-nickname {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: @footerColor;
+  }
+
+  &-id {
+    color: @bgColor;
   }
 }
 

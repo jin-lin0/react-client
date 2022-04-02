@@ -18,6 +18,8 @@ const Api = {
     request({
       url: `https://api.multiavatar.com/${id}.svg?apikey=D7eQk9Fs0Ng1PB`,
     }),
+  findUserById: (id: string) =>
+    request({ url: "/user/findById", params: { id } }),
 };
 
 export default Api;

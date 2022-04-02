@@ -1,9 +1,10 @@
 import { HomeContext } from "@/context";
+import { Modal } from "antd";
 import { useContext, useEffect, useState } from "react";
 import "./index.less";
 
 const HomeHeader = () => {
-  const { currentUser = {}, socket } = useContext<any>(HomeContext);
+  const { currentUser = {}, socket, setModal } = useContext<any>(HomeContext);
   const [onLineInfo, setOnlineInfo] = useState({});
   useEffect(() => {
     socket.on("onLineUser", (data) => {
@@ -24,7 +25,12 @@ const HomeHeader = () => {
         }（当前在线人数：${Object.keys(onLineInfo).length}）`}</div>
       </header>
 
-      <div className="home-header-addFriend">添加好友</div>
+      <div
+        className="home-header-addFriend"
+        onClick={() => setModal("addFriend")}
+      >
+        添加好友
+      </div>
     </div>
   );
 };

@@ -32,7 +32,9 @@ instance.interceptors.response.use(
         default:
           break;
       }
-      message.error(data.msg);
+      if (!data.hideError) {
+        message.error(data.msg);
+      }
     }
     if (data.token) {
       LoginToken.save(data.token);
