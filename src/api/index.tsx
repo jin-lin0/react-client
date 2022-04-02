@@ -1,9 +1,10 @@
 import { request } from "@/utils/request";
 
 interface LoginInfo {
-  phone_number: String;
-  password: String;
-  nickname: String;
+  avatarUrl?: string;
+  phone_number: string;
+  password: string;
+  nickname: string;
 }
 
 type RegisterInfo = LoginInfo;
@@ -14,7 +15,7 @@ const Api = {
   register: (RegisterInfo: RegisterInfo) =>
     request({ url: "/user/register", method: "POST", params: RegisterInfo }),
   getInfo: () => request({ url: "/user/getInfo", method: "GET" }),
-  generateAvator: (id: string) =>
+  generateavatar: (id: string | number) =>
     request({
       url: `https://api.multiavatar.com/${id}.svg?apikey=D7eQk9Fs0Ng1PB`,
     }),

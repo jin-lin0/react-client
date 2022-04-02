@@ -64,7 +64,7 @@ const ChatArea = (props) => {
   return (
     <div className="chat-area">
       <header>
-        <img alt="" className="avator" />
+        <img alt="" className="avatar" />
         <div className="nickname">{nickname}</div>
       </header>
       <section className="chat-area-content">

@@ -16,9 +16,9 @@ const HomeHeader = () => {
     <div className="home-header">
       <header>
         <img
-          src={currentUser.avatorUrl}
+          src={currentUser.avatarUrl}
           alt=""
-          className="home-header-avator"
+          className="home-header-avatar"
         />
         <div className="home-header-nickname">{`${
           currentUser.nickname || ""

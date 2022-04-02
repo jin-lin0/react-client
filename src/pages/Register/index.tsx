@@ -23,7 +23,13 @@ const Register = () => {
       "密码中需包含字母、数字，长度6至12位!",
     ];
     if (Feature.handleValidate(validateCon, validateErrMsg)) {
-      const data = await Api.register({ phone_number, password, nickname });
+      const avatarUrl = `https://api.multiavatar.com/${phone_number}.svg?apikey=D7eQk9Fs0Ng1PB`;
+      const data = await Api.register({
+        phone_number,
+        password,
+        nickname,
+        avatarUrl,
+      });
       if (data) {
         message.success("注册成功！");
         navigate("/login", { replace: true });

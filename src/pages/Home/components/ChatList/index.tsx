@@ -7,7 +7,7 @@ import Tool from "@/utils/tool";
 
 const ChatListItem = (props) => {
   const { active, item, onClick } = props;
-  const { nickname, avatorUrl } = item;
+  const { nickname, avatarUrl } = item;
   return (
     <div
       className={classNames("chat-list-item", {
@@ -15,7 +15,7 @@ const ChatListItem = (props) => {
       })}
       onClick={onClick}
     >
-      <img src={avatorUrl} alt="" />
+      <img src={avatarUrl} alt="" />
       <div className="nickname">{nickname}</div>
     </div>
   );

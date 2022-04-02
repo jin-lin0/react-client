@@ -40,6 +40,8 @@ const Home = () => {
       const user = await Api.findUserById(v);
       if (Array.isArray(user)) {
         setAddFriendList(user);
+      } else {
+        setAddFriendList([]);
       }
     };
 
@@ -95,13 +97,18 @@ const Home = () => {
         />
         {addFriendList.map((item: UserInfo, index: number) => (
           <div className="modal-addFriend-item" key={index}>
-            <img alt="" className="modal-addFriend-item-avator" />
+            <img
+              src={item.avatarUrl || ""}
+              alt=""
+              className="modal-addFriend-item-avatar"
+            />
             <div className="modal-addFriend-item-content">
               <div className="modal-addFriend-item-nickname">
                 {item.nickname}
               </div>
               <div className="modal-addFriend-item-id">id:{item._id}</div>
             </div>
+            <div className="modal-addFriend-item-button">添加</div>
           </div>
         ))}
       </Modal>
