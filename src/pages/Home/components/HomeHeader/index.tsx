@@ -8,7 +8,6 @@ const HomeHeader = () => {
   const [onLineInfo, setOnlineInfo] = useState({});
   useEffect(() => {
     socket.on("onLineUser", (data) => {
-      console.log(data);
       setOnlineInfo(data);
     });
   }, []);

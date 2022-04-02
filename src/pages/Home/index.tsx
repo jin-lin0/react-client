@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import Cookies from "js-cookie";
 import { HomeContext } from "@/context";
-import { SOCKET_OPTIONS, SOCKET_URL } from "../../const/config";
 import HomeHeader from "./components/HomeHeader";
 import ChatList from "./components/ChatList";
 import ChatArea from "./components/ChatArea";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { LoginToken } from "@/utils/token";
+import { FreshToken, LoginToken } from "@/utils/token";
 import Api from "@/api";
 import "./index.less";
 import { Input, Modal } from "antd";
 import { UserInfo } from "@/const/interface";
 
-const Home = () => {
-  const socket = io(SOCKET_URL, SOCKET_OPTIONS);
+const Home = (props) => {
+  const { socket } = props;
   const navigate = useNavigate();
   const [curUser, setCurUser] = useState({});
   const [activeChatIndex, setActiveChatIndex] = useState(0);
@@ -57,6 +56,7 @@ const Home = () => {
     });
     socket.on("disconnect", (reason) => {
       console.log(reason);
+      FreshToken.delete();
       if (reason === "io server disconnect") {
         socket.connect();
       }
@@ -65,6 +65,12 @@ const Home = () => {
       const user = await Api.getInfo();
       setCurUser(user);
     };
+
+    //socket 在进入页面之后才绑定，暂时的处理方案
+    if (!FreshToken.get()) {
+      FreshToken.save(1);
+      window.location.reload();
+    }
 
     fetchData();
   }, []);

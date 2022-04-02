@@ -4,4 +4,10 @@ export const LoginToken = {
   delete: () => window.sessionStorage.removeItem("login_token"),
 };
 
-export default { LoginToken };
+export const FreshToken = {
+  get: () => window.sessionStorage.getItem("fresh_token"),
+  save: (value) => value && window.sessionStorage.setItem("fresh_token", value),
+  delete: () => window.sessionStorage.removeItem("fresh_token"),
+};
+
+export default { LoginToken, FreshToken };
