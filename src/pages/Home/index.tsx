@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { HomeContext } from "@/context";
 import HomeHeader from "./components/HomeHeader";
 import ChatList from "./components/ChatList";
