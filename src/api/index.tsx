@@ -21,6 +21,8 @@ const Api = {
     }),
   findUserById: (id: string) =>
     request({ url: "/user/findById", params: { id } }),
+  getMyFriends: (id: string) =>
+    request({ url: "/friend/getMy", params: { id } }),
 };
 
 export default Api;

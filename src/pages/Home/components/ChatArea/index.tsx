@@ -9,7 +9,7 @@ import classNames from "classnames";
 
 const ChatArea = (props) => {
   const { data } = props;
-  const { nickname } = data;
+  const { nickname, avatarUrl } = data;
   const { currentUser } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
@@ -64,7 +64,7 @@ const ChatArea = (props) => {
   return (
     <div className="chat-area">
       <header>
-        <img alt="" className="avatar" />
+        <img src={avatarUrl} alt="" className="avatar" />
         <div className="nickname">{nickname}</div>
       </header>
       <section className="chat-area-content">

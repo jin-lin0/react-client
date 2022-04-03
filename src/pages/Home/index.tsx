@@ -15,16 +15,13 @@ const Home = (props) => {
   const { socket } = props;
   const navigate = useNavigate();
   const [curUser, setCurUser] = useState<any>({});
-  const [activeChatIndex, setActiveChatIndex] = useState(0);
-  const [chatList, setChatList] = useState([
-    { nickname: "NickOut" },
-    { nickname: "王思思" },
-  ]);
+  const [activeChatId, setActiveChatId] = useState("");
+  const [chatList, setChatList] = useState([]);
   const [modal, setModal] = useState("");
   const [addFriendList, setAddFriendList] = useState<any>([]);
 
-  const onChooseChat = (activeChat) => {
-    setActiveChatIndex(activeChat);
+  const onChooseChat = (id) => {
+    setActiveChatId(id);
   };
 
   const handleLogout = () => {
@@ -60,7 +57,6 @@ const Home = (props) => {
       });
     });
     socket.on("addSuccess", (data) => {
-      console.log(data);
       if (data) {
         message.success("添加好友成功");
         setModal("");
@@ -89,15 +85,27 @@ const Home = (props) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const chatlist = await Api.getMyFriends(curUser._id);
+      setChatList(chatlist);
+    };
+    fetchData();
+  }, [curUser, modal]);
+
   return (
     <div className="home">
       <HomeContext.Provider
-        value={{ currentUser: curUser, activeChatIndex, socket, setModal }}
+        value={{ currentUser: curUser, activeChatId, socket, setModal }}
       >
         <HomeHeader />
         <div className="home-container">
           <ChatList onChooseChat={onChooseChat} data={chatList} />
-          <ChatArea data={chatList[activeChatIndex]} />
+          <ChatArea
+            data={
+              chatList.find((item: UserInfo) => item._id === activeChatId) || {}
+            }
+          />
         </div>
       </HomeContext.Provider>
       <Modal

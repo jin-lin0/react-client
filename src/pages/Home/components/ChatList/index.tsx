@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { HomeContext } from "@/context";
 import "./index.less";
 import { Input } from "antd";
@@ -23,8 +23,11 @@ const ChatListItem = (props) => {
 
 const ChatList = (props) => {
   const { onChooseChat, data } = props;
-  const { activeChatIndex } = useContext<any>(HomeContext);
+  const { activeChatId } = useContext<any>(HomeContext);
   const [chatListData, setChatListData] = useState(data);
+  useEffect(() => {
+    setChatListData(data);
+  }, [data]);
 
   const onSearchChatList = (e) => {
     setChatListData(Tool.fuzzyQuery(e.target.value, data, "nickname"));
@@ -38,9 +41,9 @@ const ChatList = (props) => {
       {chatListData.map((item, index) => (
         <ChatListItem
           key={index}
-          active={activeChatIndex === index}
+          active={activeChatId === item._id}
           item={item}
-          onClick={() => onChooseChat(index)}
+          onClick={() => onChooseChat(item._id)}
         />
       ))}
     </div>
