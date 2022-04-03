@@ -4,6 +4,8 @@ import Api from "@/api";
 import Regex from "@/utils/regex";
 import Feature from "@/utils/feature";
 import "./index.less";
+import { FreshToken } from "@/utils/token";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,6 +28,10 @@ const Login = () => {
       }
     }
   };
+
+  useEffect(() => {
+    FreshToken.delete();
+  }, []);
 
   return (
     <div className="login">

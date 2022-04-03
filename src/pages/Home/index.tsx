@@ -8,13 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { FreshToken, LoginToken } from "@/utils/token";
 import Api from "@/api";
 import "./index.less";
-import { Input, Modal } from "antd";
+import { Input, message, Modal } from "antd";
 import { UserInfo } from "@/const/interface";
 
 const Home = (props) => {
   const { socket } = props;
   const navigate = useNavigate();
-  const [curUser, setCurUser] = useState({});
+  const [curUser, setCurUser] = useState<any>({});
   const [activeChatIndex, setActiveChatIndex] = useState(0);
   const [chatList, setChatList] = useState([
     { nickname: "NickOut" },
@@ -45,6 +45,12 @@ const Home = (props) => {
 
     fetch();
   };
+  const handleAddFriend = (id: string) => {
+    socket.emit("addFriend", {
+      userBuild: curUser._id,
+      userReceive: id,
+    });
+  };
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -52,6 +58,15 @@ const Home = (props) => {
       Api.getInfo().then((userInfo) => {
         socket.emit("online", userInfo);
       });
+    });
+    socket.on("addSuccess", (data) => {
+      console.log(data);
+      if (data) {
+        message.success("添加好友成功");
+        setModal("");
+      } else {
+        message.error("TA已经是您的好友了");
+      }
     });
     socket.on("disconnect", (reason) => {
       console.log(reason);
@@ -113,7 +128,12 @@ const Home = (props) => {
               </div>
               <div className="modal-addFriend-item-id">id:{item._id}</div>
             </div>
-            <div className="modal-addFriend-item-button">添加</div>
+            <div
+              className="modal-addFriend-item-button"
+              onClick={() => handleAddFriend(item._id)}
+            >
+              添加
+            </div>
           </div>
         ))}
       </Modal>
