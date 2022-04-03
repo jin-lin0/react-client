@@ -9,19 +9,19 @@ import classNames from "classnames";
 
 const ChatArea = (props) => {
   const { data } = props;
-  const { nickname, avatarUrl } = data;
-  const { currentUser } = useContext<any>(HomeContext);
+  const { nickname, avatarUrl, _id: receiveId } = data;
+  const { currentUser, socket } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
   const [listMsg, setListMsg] = useState<any>([]);
 
   const MessageItem = (props) => {
     const { msgObj } = props;
-    const { from = "", content = "" } = msgObj;
+    const { sender = "", content = "" } = msgObj;
     return (
       <div
         className={classNames("message-item", {
-          "message-item-self": from === currentUser.phone_number,
+          "message-item-self": sender === currentUser._id,
         })}
       >
         <pre className="message-item-content">{content}</pre>
@@ -49,17 +49,29 @@ const ChatArea = (props) => {
 
   const onSendMsg = () => {
     if (msg === "") return;
-    console.log(msg);
+    socket.emit("sendMsg", {
+      type: "text",
+      sender: currentUser._id,
+      receive: receiveId,
+      content: msg,
+    });
     setListMsg((list) => [
       ...list,
-      { from: currentUser.phone_number, content: msg },
+      { sender: currentUser._id, receive: receiveId, content: msg },
     ]);
     setMsg("");
   };
 
   useEffect(() => {
     setListMsg([]);
-  }, [nickname]);
+    socket.on("receiveMsg", (data) => {
+      const { sender } = data;
+      if (sender === receiveId) {
+        setListMsg([...listMsg, data]);
+      }
+      console.log(data);
+    });
+  }, [receiveId]);
 
   return (
     <div className="chat-area">
