@@ -67,7 +67,7 @@ const ChatArea = (props) => {
     socket.on("receiveMsg", (data) => {
       const { sender } = data;
       if (sender === receiveId) {
-        setListMsg([...listMsg, data]);
+        setListMsg((list) => [...list, data]);
       }
       console.log(data);
     });
