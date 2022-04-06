@@ -72,7 +72,6 @@ const ChatArea = (props) => {
       console.log(data);
     });
   }, [receiveId]);
-
   return (
     <div className="chat-area">
       <header>

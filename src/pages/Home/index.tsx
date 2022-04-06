@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { FreshToken, LoginToken } from "@/utils/token";
 import Api from "@/api";
 import "./index.less";
-import { Input, message, Modal } from "antd";
+import { Descriptions, Input, message, Modal } from "antd";
 import { UserInfo } from "@/const/interface";
+import Tool from "@/utils/tool";
 
 const Home = (props) => {
   const { socket } = props;
@@ -144,6 +145,30 @@ const Home = (props) => {
             </div>
           </div>
         ))}
+      </Modal>
+      <Modal
+        title="详细信息"
+        visible={modal === "showDetail"}
+        onCancel={() => setModal("")}
+        onOk={() => {
+          setModal("");
+        }}
+        centered={true}
+        footer={null}
+      >
+        <Descriptions className="modal-showDetail" column={1}>
+          <Descriptions.Item label="头像">
+            <img src={curUser.avatarUrl} style={{ width: "2rem" }} alt="" />
+          </Descriptions.Item>
+          <Descriptions.Item label="昵称">{curUser.nickname}</Descriptions.Item>
+          <Descriptions.Item label="手机号">
+            {curUser.phone_number}
+          </Descriptions.Item>
+          <Descriptions.Item label="id">{curUser._id}</Descriptions.Item>
+          <Descriptions.Item label="注册时间">
+            {Tool.formatDate(curUser.createdAt)}
+          </Descriptions.Item>
+        </Descriptions>
       </Modal>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>

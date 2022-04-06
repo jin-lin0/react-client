@@ -18,6 +18,7 @@ const HomeHeader = () => {
           src={currentUser.avatarUrl}
           alt=""
           className="home-header-avatar"
+          onClick={() => setModal("showDetail")}
         />
         <div className="home-header-nickname">{`${
           currentUser.nickname || ""
