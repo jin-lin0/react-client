@@ -23,6 +23,8 @@ const Api = {
     request({ url: "/user/findById", params: { id } }),
   getMyFriends: (id: string) =>
     request({ url: "/friend/getMy", params: { id } }),
+  getPrivate: (userAId: string, userBId: string, number = 30) =>
+    request({ url: "/msg/getPrivate", params: { userAId, userBId, number } }),
 };
 
 export default Api;

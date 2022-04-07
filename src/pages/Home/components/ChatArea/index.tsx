@@ -6,6 +6,7 @@ import { HomeContext } from "@/context";
 import "./index.less";
 import TextArea from "antd/lib/input/TextArea";
 import classNames from "classnames";
+import Api from "@/api";
 
 const ChatArea = (props) => {
   const { data } = props;
@@ -63,15 +64,25 @@ const ChatArea = (props) => {
   };
 
   useEffect(() => {
-    setListMsg([]);
+    const fetchData = async () => {
+      const data = await Api.getPrivate(currentUser._id, receiveId);
+      if (data) {
+        setListMsg(data);
+      } else {
+        setListMsg([]);
+      }
+    };
+
     socket.on("receiveMsg", (data) => {
       const { sender } = data;
       if (sender === receiveId) {
         setListMsg((list) => [...list, data]);
       }
-      console.log(data);
     });
+
+    fetchData();
   }, [receiveId]);
+
   return (
     <div className="chat-area">
       <header>
