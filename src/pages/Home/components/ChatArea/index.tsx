@@ -59,7 +59,7 @@ const ChatArea = (props) => {
     if (contentRef) {
       setTimeout(
         () => (contentRef.current.scrollTop = contentRef.current.scrollHeight),
-        10
+        15
       );
     }
   };
