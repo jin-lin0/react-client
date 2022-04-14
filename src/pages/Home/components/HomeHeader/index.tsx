@@ -18,7 +18,7 @@ const HomeHeader = () => {
           src={currentUser.avatarUrl}
           alt=""
           className="home-header-avatar"
-          onClick={() => setModal("showDetail")}
+          onClick={() => setModal({ key: "showDetail" })}
         />
         <div className="home-header-nickname">{`${
           currentUser.nickname || ""
@@ -27,7 +27,7 @@ const HomeHeader = () => {
 
       <div
         className="home-header-addFriend"
-        onClick={() => setModal("addFriend")}
+        onClick={() => setModal({ key: "addFriend" })}
       >
         添加好友
       </div>

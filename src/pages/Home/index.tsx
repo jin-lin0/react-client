@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { FreshToken, LoginToken } from "@/utils/token";
 import Api from "@/api";
 import "./index.less";
-import { Descriptions, Input, message, Modal } from "antd";
+import { message } from "antd";
 import { UserInfo } from "@/const/interface";
-import Tool from "@/utils/tool";
+import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
+import AddFriendModal from "./components/Modal/components/AddFriendModal";
 
 const Home = (props) => {
   const { socket } = props;
@@ -18,8 +19,7 @@ const Home = (props) => {
   const [curUser, setCurUser] = useState<any>({});
   const [activeChatId, setActiveChatId] = useState("");
   const [chatList, setChatList] = useState([]);
-  const [modal, setModal] = useState("");
-  const [addFriendList, setAddFriendList] = useState<any>([]);
+  const [modal, setModal] = useState<any>({});
 
   const onChooseChat = (id) => {
     setActiveChatId(id);
@@ -29,25 +29,6 @@ const Home = (props) => {
     navigate("/login", { replace: true });
     LoginToken.delete();
     socket.disconnect();
-  };
-
-  const onSearchUserById = (v) => {
-    const fetch = async () => {
-      const user = await Api.findUserById(v);
-      if (Array.isArray(user)) {
-        setAddFriendList(user);
-      } else {
-        setAddFriendList([]);
-      }
-    };
-
-    fetch();
-  };
-  const handleAddFriend = (id: string) => {
-    socket.emit("addFriend", {
-      userBuild: curUser._id,
-      userReceive: id,
-    });
   };
 
   useEffect(() => {
@@ -60,7 +41,7 @@ const Home = (props) => {
     socket.on("addSuccess", (data) => {
       if (data) {
         message.success("添加好友成功");
-        setModal("");
+        setModal({});
       } else {
         message.error("TA已经是您的好友了");
       }
@@ -97,7 +78,7 @@ const Home = (props) => {
   return (
     <div className="home">
       <HomeContext.Provider
-        value={{ currentUser: curUser, activeChatId, socket, setModal }}
+        value={{ currentUser: curUser, activeChatId, socket, setModal, modal }}
       >
         <HomeHeader />
         <div className="home-container">
@@ -108,68 +89,10 @@ const Home = (props) => {
             }
           />
         </div>
+
+        {modal.key === "addFriend" && <AddFriendModal />}
+        {modal.key === "showDetail" && <ShowDetailModal />}
       </HomeContext.Provider>
-      <Modal
-        title="添加好友"
-        visible={modal === "addFriend"}
-        onCancel={() => setModal("")}
-        onOk={() => {
-          setModal("");
-        }}
-        centered={true}
-        footer={null}
-      >
-        <Input.Search
-          placeholder="请输入好友的id"
-          onSearch={onSearchUserById}
-          spellCheck={false}
-        />
-        {addFriendList.map((item: UserInfo, index: number) => (
-          <div className="modal-addFriend-item" key={index}>
-            <img
-              src={item.avatarUrl || ""}
-              alt=""
-              className="modal-addFriend-item-avatar"
-            />
-            <div className="modal-addFriend-item-content">
-              <div className="modal-addFriend-item-nickname">
-                {item.nickname}
-              </div>
-              <div className="modal-addFriend-item-id">id:{item._id}</div>
-            </div>
-            <div
-              className="modal-addFriend-item-button"
-              onClick={() => handleAddFriend(item._id)}
-            >
-              添加
-            </div>
-          </div>
-        ))}
-      </Modal>
-      <Modal
-        title="详细信息"
-        visible={modal === "showDetail"}
-        onCancel={() => setModal("")}
-        onOk={() => {
-          setModal("");
-        }}
-        centered={true}
-        footer={null}
-      >
-        <Descriptions className="modal-showDetail" column={1}>
-          <Descriptions.Item label="头像">
-            <img src={curUser.avatarUrl} style={{ width: "2rem" }} alt="" />
-          </Descriptions.Item>
-          <Descriptions.Item label="昵称">{curUser.nickname}</Descriptions.Item>
-          <Descriptions.Item label="手机号">
-            {curUser.phone_number}
-          </Descriptions.Item>
-          <Descriptions.Item label="id">{curUser._id}</Descriptions.Item>
-          <Descriptions.Item label="注册时间">
-            {Tool.formatDate(curUser.createdAt)}
-          </Descriptions.Item>
-        </Descriptions>
-      </Modal>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>
   );
