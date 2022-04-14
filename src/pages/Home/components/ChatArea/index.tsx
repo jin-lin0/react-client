@@ -1,5 +1,11 @@
 import { Popover } from "antd";
-import { useState, useContext, useEffect } from "react";
+import {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import Picker from "emoji-picker-react";
 import { SmileOutlined, UploadOutlined } from "@ant-design/icons";
 import { HomeContext } from "@/context";
@@ -9,12 +15,13 @@ import classNames from "classnames";
 import Api from "@/api";
 
 const ChatArea = (props) => {
-  const { data } = props;
-  const { nickname, avatarUrl, _id: receiveId } = data;
+  const { data: areaData } = props;
+  const { nickname, avatarUrl, _id: receiveId } = areaData;
   const { currentUser, socket } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
   const [listMsg, setListMsg] = useState<any>([]);
+  const contentRef = useRef<any>(null);
 
   const MessageItem = (props) => {
     const { msgObj } = props;
@@ -48,6 +55,15 @@ const ChatArea = (props) => {
     setMsg(e.target.value);
   };
 
+  const handleScrollBottom = () => {
+    if (contentRef) {
+      setTimeout(
+        () => (contentRef.current.scrollTop = contentRef.current.scrollHeight),
+        10
+      );
+    }
+  };
+
   const onSendMsg = () => {
     if (msg === "") return;
     socket.emit("sendMsg", {
@@ -61,6 +77,7 @@ const ChatArea = (props) => {
       { sender: currentUser._id, receive: receiveId, content: msg },
     ]);
     setMsg("");
+    handleScrollBottom();
   };
 
   useEffect(() => {
@@ -72,15 +89,17 @@ const ChatArea = (props) => {
         setListMsg([]);
       }
     };
-
-    socket.on("receiveMsg", (data) => {
-      const { sender } = data;
-      if (sender === receiveId) {
+    if (!socket._callbacks.$receiveMsg) {
+      socket.on("receiveMsg", (data) => {
         setListMsg((list) => [...list, data]);
-      }
-    });
+      });
+    }
 
     fetchData();
+  }, [receiveId]);
+
+  useLayoutEffect(() => {
+    handleScrollBottom();
   }, [receiveId]);
 
   return (
@@ -89,10 +108,14 @@ const ChatArea = (props) => {
         <img src={avatarUrl} alt="" className="avatar" />
         <div className="nickname">{nickname}</div>
       </header>
-      <section className="chat-area-content">
-        {listMsg.map((msgItem, index) => (
-          <MessageItem msgObj={msgItem} key={index} />
-        ))}
+      <section className="chat-area-content" ref={contentRef}>
+        {listMsg
+          .filter(
+            (item) => item.sender === receiveId || item.receive === receiveId
+          )
+          .map((msgItem, index) => (
+            <MessageItem msgObj={msgItem} key={index} />
+          ))}
       </section>
       <footer>
         <div className="chat-area-panel">
