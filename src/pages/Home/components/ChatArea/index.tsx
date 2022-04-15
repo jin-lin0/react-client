@@ -23,23 +23,8 @@ const ChatArea = (props) => {
   const [listMsg, setListMsg] = useState<any>([]);
   const contentRef = useRef<any>(null);
 
-  const MessageItem = (props) => {
-    const { msgObj } = props;
-    const { sender = "", content = "" } = msgObj;
-    return (
-      <div
-        className={classNames("message-item", {
-          "message-item-self": sender === currentUser._id,
-        })}
-      >
-        <pre className="message-item-content">{content}</pre>
-      </div>
-    );
-  };
-
-  const HintItem = (props) => {
-    const { nickname } = props;
-    return <div className="hint-item">- {nickname} 进来了 -</div>;
+  const onAvatorClick = (e) => {
+    console.log(e);
   };
 
   const onEmojiClick = (event, emoji) => {
@@ -102,10 +87,34 @@ const ChatArea = (props) => {
     handleScrollBottom();
   }, [receiveId]);
 
+  const MessageItem = (props) => {
+    const { msgObj } = props;
+    const { sender = "", content = "" } = msgObj;
+    return (
+      <div
+        className={classNames("message-item", {
+          "message-item-self": sender === currentUser._id,
+        })}
+      >
+        <pre className="message-item-content">{content}</pre>
+      </div>
+    );
+  };
+
+  const HintItem = (props) => {
+    const { nickname } = props;
+    return <div className="hint-item">- {nickname} 进来了 -</div>;
+  };
+
   return (
     <div className="chat-area">
       <header>
-        <img src={avatarUrl} alt="" className="avatar" />
+        <img
+          src={avatarUrl}
+          alt=""
+          className="avatar"
+          onClick={onAvatorClick}
+        />
         <div className="nickname">{nickname}</div>
       </header>
       <section className="chat-area-content" ref={contentRef}>

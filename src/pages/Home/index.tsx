@@ -34,7 +34,7 @@ const Home = (props) => {
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket);
-      Api.getInfo().then((userInfo) => {
+      Api.getMyInfo().then((userInfo) => {
         socket.emit("online", userInfo);
       });
     });
@@ -54,7 +54,7 @@ const Home = (props) => {
       }
     });
     const fetchData = async () => {
-      const user = await Api.getInfo();
+      const user = await Api.getMyInfo();
       setCurUser(user);
     };
 
