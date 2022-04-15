@@ -17,14 +17,17 @@ import Api from "@/api";
 const ChatArea = (props) => {
   const { data: areaData } = props;
   const { nickname, avatarUrl, _id: receiveId } = areaData;
-  const { currentUser, socket } = useContext<any>(HomeContext);
+  const { currentUser, socket, setModal } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
   const [listMsg, setListMsg] = useState<any>([]);
   const contentRef = useRef<any>(null);
 
-  const onAvatorClick = (e) => {
-    console.log(e);
+  const onAvatorClick = async () => {
+    if (receiveId) {
+      const modalData = await Api.getInfo(receiveId);
+      setModal({ key: "showDetail", data: modalData });
+    }
   };
 
   const onEmojiClick = (event, emoji) => {

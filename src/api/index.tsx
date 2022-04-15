@@ -15,6 +15,8 @@ const Api = {
   register: (RegisterInfo: RegisterInfo) =>
     request({ url: "/user/register", method: "POST", params: RegisterInfo }),
   getMyInfo: () => request({ url: "/user/getMyInfo", method: "GET" }),
+  getInfo: (id: string | number) =>
+    request({ url: `/user/getInfo?id=${id}`, method: "GET" }),
   generateavatar: (id: string | number) =>
     request({
       url: `https://api.multiavatar.com/${id}.svg?apikey=D7eQk9Fs0Ng1PB`,
