@@ -43,7 +43,7 @@ const Home = (props) => {
         message.success("添加好友成功");
         setModal({});
       } else {
-        message.error("TA已经是您的好友了");
+        message.error("TA已经是您的好友了～");
       }
     });
     socket.on("disconnect", (reason) => {

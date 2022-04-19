@@ -1,4 +1,4 @@
-import { Popover } from "antd";
+import { message, Popover, Upload } from "antd";
 import {
   useState,
   useContext,
@@ -13,6 +13,9 @@ import "./index.less";
 import TextArea from "antd/lib/input/TextArea";
 import classNames from "classnames";
 import Api from "@/api";
+import { LoginToken } from "@/utils/token";
+import { RcFile } from "antd/lib/upload";
+import Regex from "@/utils/regex";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
@@ -66,6 +69,28 @@ const ChatArea = (props) => {
     ]);
     setMsg("");
     handleScrollBottom();
+  };
+
+  const onChangeUpload = (info) => {
+    if (info?.file.status === "done") {
+      message.success("上传文件成功!");
+    }
+  };
+
+  const onBeforeUpload = (file: RcFile): Promise<boolean> => {
+    const types: string[] = ["md", "doc", "docx", "jpg"];
+    return new Promise((resolve, reject) => {
+      console.log(file);
+      if (!types.includes(Regex.getFileExt(file.name))) {
+        message.error(`您只能上传${types.join(",")}类型的文件！`);
+        return reject(false);
+      }
+      if (file.size / 1024 / 1024 > 1) {
+        message.error("您所传的文件大小应小于1MB！");
+        return reject(false);
+      }
+      return resolve(true);
+    });
   };
 
   useEffect(() => {
@@ -131,6 +156,17 @@ const ChatArea = (props) => {
       </section>
       <footer>
         <div className="chat-area-panel">
+          <Upload
+            action="http://localhost:5555/chatApi/file/upload"
+            maxCount={1}
+            beforeUpload={onBeforeUpload}
+            onChange={onChangeUpload}
+            name="singleFile"
+            showUploadList={false}
+            headers={{ Authorization: LoginToken.get() || "" }}
+          >
+            <UploadOutlined style={{ fontSize: "1.2rem", color: "#fff" }} />
+          </Upload>
           <Popover
             trigger="click"
             content={
@@ -142,7 +178,6 @@ const ChatArea = (props) => {
               onClick={() => onChangePanel("emoji")}
             />
           </Popover>
-          <UploadOutlined style={{ fontSize: "1.2rem" }} />
         </div>
         <TextArea
           onChange={onChangeTextare}
