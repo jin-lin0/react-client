@@ -16,6 +16,7 @@ import Api from "@/api";
 import { LoginToken } from "@/utils/token";
 import { RcFile } from "antd/lib/upload";
 import Regex from "@/utils/regex";
+import { SOCKET_URL } from "@/const/config";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
@@ -157,7 +158,7 @@ const ChatArea = (props) => {
       <footer>
         <div className="chat-area-panel">
           <Upload
-            action="http://localhost:5555/chatApi/file/upload"
+            action={`${SOCKET_URL}/chatApi/file/upload`}
             maxCount={1}
             beforeUpload={onBeforeUpload}
             onChange={onChangeUpload}

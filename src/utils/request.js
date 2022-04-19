@@ -1,10 +1,11 @@
 import { message } from "antd";
 import axios from "axios";
 import { LoginToken } from "./token";
+import { SOCKET_URL } from "@/const/config";
 
 const instance = axios.create({
   timeout: 5000,
-  baseURL: "http://localhost:5555/chatApi",
+  baseURL: `${SOCKET_URL}/chatApi`,
 });
 
 instance.interceptors.request.use(
