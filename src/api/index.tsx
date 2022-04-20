@@ -9,6 +9,18 @@ interface LoginInfo {
 
 type RegisterInfo = LoginInfo;
 
+interface UpdatePwdInfo {
+  current_password: string;
+  password: string;
+  confirm_password: string;
+}
+
+interface UpdateMyInfo {
+  nickname: string;
+  phone_number: string;
+  sex: number;
+}
+
 const Api = {
   login: (LoginInfo: LoginInfo) =>
     request({ url: "/user/login", method: "POST", params: LoginInfo }),
@@ -23,6 +35,10 @@ const Api = {
     }),
   findUserById: (id: string) =>
     request({ url: "/user/findById", params: { id } }),
+  updateMyPwd: (params: UpdatePwdInfo) =>
+    request({ url: "/user/updateMyPwd", method: "POST", params }),
+  updateMyInfo: (params: UpdateMyInfo) =>
+    request({ url: "/user/updateMyInfo", method: "POST", params }),
   getMyFriends: (id: string) =>
     request({ url: "/friend/getMy", params: { id } }),
   getPrivate: (userAId: string, userBId: string, number = 30) =>

@@ -78,7 +78,14 @@ const Home = (props) => {
   return (
     <div className="home">
       <HomeContext.Provider
-        value={{ currentUser: curUser, activeChatId, socket, setModal, modal }}
+        value={{
+          currentUser: curUser,
+          setCurUser,
+          activeChatId,
+          socket,
+          setModal,
+          modal,
+        }}
       >
         <HomeHeader />
         <div className="home-container">
