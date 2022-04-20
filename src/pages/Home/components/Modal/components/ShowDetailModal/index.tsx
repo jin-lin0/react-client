@@ -5,6 +5,12 @@ import { Button, Descriptions, Form, Input, message, Modal, Radio } from "antd";
 import Tool from "@/utils/tool";
 import Api from "@/api";
 
+const SexTextObj = {
+  0: "未知",
+  1: "男",
+  2: "女",
+};
+
 const ShowDetailModal = () => {
   const {
     currentUser = {},
@@ -21,6 +27,9 @@ const ShowDetailModal = () => {
         <img src={userData.avatarUrl} style={{ width: "2rem" }} alt="" />
       </Descriptions.Item>
       <Descriptions.Item label="昵称">{userData.nickname}</Descriptions.Item>
+      <Descriptions.Item label="性别">
+        {SexTextObj[userData.sex]}
+      </Descriptions.Item>
       <Descriptions.Item label="手机号">
         {userData.phone_number}
       </Descriptions.Item>
