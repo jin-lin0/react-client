@@ -35,6 +35,8 @@ const Api = {
     }),
   findUserById: (id: string) =>
     request({ url: "/user/findById", params: { id } }),
+  findUserByNickname: (nickname: string) =>
+    request({ url: "/user/findByNickname", params: { nickname } }),
   updateMyPwd: (params: UpdatePwdInfo) =>
     request({ url: "/user/updateMyPwd", method: "POST", params }),
   updateMyInfo: (params: UpdateMyInfo) =>
