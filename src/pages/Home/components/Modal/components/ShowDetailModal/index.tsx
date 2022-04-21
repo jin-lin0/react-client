@@ -148,7 +148,7 @@ const ShowDetailModal = () => {
           <Button
             type="primary"
             onClick={() => setTab("")}
-            className={classNames(tab === "" && "modal-showDetail-activeTab")}
+            className={classNames(tab !== "" && "modal-showDetail-inactiveTab")}
           >
             详细信息
           </Button>
@@ -158,7 +158,7 @@ const ShowDetailModal = () => {
                 type="primary"
                 onClick={() => setTab("modifyInfo")}
                 className={classNames(
-                  tab === "modifyInfo" && "modal-showDetail-activeTab"
+                  tab !== "modifyInfo" && "modal-showDetail-inactiveTab"
                 )}
               >
                 修改信息
@@ -167,7 +167,7 @@ const ShowDetailModal = () => {
                 type="primary"
                 onClick={() => setTab("modifyPwd")}
                 className={classNames(
-                  tab === "modifyPwd" && "modal-showDetail-activeTab"
+                  tab !== "modifyPwd" && "modal-showDetail-inactiveTab"
                 )}
               >
                 修改密码

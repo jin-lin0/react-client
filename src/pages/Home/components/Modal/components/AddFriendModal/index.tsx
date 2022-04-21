@@ -143,7 +143,7 @@ const AddFriendModal = () => {
           <Button
             type="primary"
             onClick={() => setTab("")}
-            className={classNames(tab === "" && "modal-addFriend-activeTab")}
+            className={classNames(tab !== "" && "modal-addFriend-inactiveTab")}
           >
             添加好友
           </Button>
@@ -151,7 +151,7 @@ const AddFriendModal = () => {
             type="primary"
             onClick={() => setTab("friendList")}
             className={classNames(
-              tab === "friendList" && "modal-addFriend-activeTab"
+              tab !== "friendList" && "modal-addFriend-inactiveTab"
             )}
           >
             好友列表
