@@ -1,12 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { HomeContext } from "@/context";
 import "./index.less";
-import { Input, Modal, Tabs } from "antd";
+import { Button, Input, Modal, Tabs, Popconfirm } from "antd";
 import { UserInfo } from "@/const/interface";
 import Api from "@/api";
 
 const AddFriendModal = () => {
   const [addFriendList, setAddFriendList] = useState<any>([]);
+  const [friendList, setFriendList] = useState<any>([]);
+  const [tab, setTab] = useState("");
   const {
     currentUser = {},
     modal,
@@ -47,16 +49,25 @@ const AddFriendModal = () => {
     });
   };
 
-  return (
-    <Modal
-      title="添加好友"
-      visible={modalKey === "addFriend"}
-      onCancel={() => setModal({})}
-      onOk={() => setModal({})}
-      centered={true}
-      footer={null}
-      className="modal-addFriend"
-    >
+  const handleDeleteFriend = (id: string) => {
+    socket.emit("deleteFriend", {
+      userDelete: currentUser._id,
+      userReceive: id,
+    });
+  };
+
+  useEffect(() => {
+    const fetchFriendData = async () => {
+      const data = await Api.getMyFriends(currentUser._id);
+      setFriendList(data);
+    };
+    if (tab === "friendList") {
+      fetchFriendData();
+    }
+  }, [tab]);
+
+  const AddFriendPanel = () => (
+    <>
       <Tabs defaultActiveKey="1" tabBarStyle={{ border: "none" }}>
         <Tabs.TabPane key="1" tab="昵称查询">
           <Input.Search
@@ -73,7 +84,6 @@ const AddFriendModal = () => {
           />
         </Tabs.TabPane>
       </Tabs>
-
       {addFriendList.map((item: UserInfo, index: number) => (
         <div className="modal-addFriend-item" key={index}>
           <img
@@ -93,6 +103,66 @@ const AddFriendModal = () => {
           </div>
         </div>
       ))}
+    </>
+  );
+
+  const FriendListPanel = () => {
+    return (
+      <>
+        {friendList.map((item: UserInfo, index: number) => (
+          <div className="modal-addFriend-item" key={index}>
+            <img
+              src={item.avatarUrl || ""}
+              alt=""
+              className="modal-addFriend-item-avatar"
+            />
+            <div className="modal-addFriend-item-content">
+              <div className="modal-addFriend-item-nickname">
+                {item.nickname}
+              </div>
+              <div className="modal-addFriend-item-id">id:{item._id}</div>
+            </div>
+            <div className="modal-addFriend-item-button">
+              <Popconfirm
+                title="确认此次操作？"
+                onConfirm={() => handleDeleteFriend(item._id)}
+              >
+                删除
+              </Popconfirm>
+            </div>
+          </div>
+        ))}
+      </>
+    );
+  };
+  return (
+    <Modal
+      title={
+        <div className="modal-addFriend-header">
+          <div
+            style={{ cursor: "pointer", whiteSpace: "nowrap" }}
+            onClick={() => setTab("")}
+          >
+            添加好友
+          </div>
+          <Button
+            type="primary"
+            style={{ marginLeft: "16px" }}
+            onClick={() => setTab("friendList")}
+          >
+            好友列表
+          </Button>
+        </div>
+      }
+      visible={modalKey === "addFriend"}
+      onCancel={() => setModal({})}
+      onOk={() => setModal({})}
+      centered={true}
+      footer={null}
+      className="modal-addFriend"
+    >
+      {tab === "" && <AddFriendPanel />}
+      {tab === "friendList" && <FriendListPanel />}
     </Modal>
   );
 };

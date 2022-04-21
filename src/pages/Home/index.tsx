@@ -38,12 +38,20 @@ const Home = (props) => {
         socket.emit("online", userInfo);
       });
     });
-    socket.on("addSuccess", (data) => {
+    socket.on("addFriendSuccess", (data) => {
       if (data) {
         message.success("添加好友成功");
         setModal({});
       } else {
         message.error("TA已经是您的好友了～");
+      }
+    });
+    socket.on("deleteFriendSuccess", (data) => {
+      if (data) {
+        message.success("删除好友成功");
+        setModal({});
+      } else {
+        message.error("删除好友失败！");
       }
     });
     socket.on("disconnect", (reason) => {

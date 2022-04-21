@@ -29,7 +29,7 @@ const HomeHeader = () => {
         className="home-header-addFriend"
         onClick={() => setModal({ key: "addFriend" })}
       >
-        添加好友
+        好友管理
       </div>
     </div>
   );
