@@ -33,6 +33,9 @@ const ShowDetailModal = () => {
       <Descriptions.Item label="手机号">
         {userData.phone_number}
       </Descriptions.Item>
+      <Descriptions.Item label="个性签名">
+        {userData.signature}
+      </Descriptions.Item>
       <Descriptions.Item label="id">{userData._id}</Descriptions.Item>
       <Descriptions.Item label="注册时间">
         {Tool.formatDate(userData.createdAt)}
@@ -81,6 +84,13 @@ const ShowDetailModal = () => {
             <Radio value={1}>男</Radio>
             <Radio value={2}>女</Radio>
           </Radio.Group>
+        </Form.Item>
+        <Form.Item name="signature" label="个性签名">
+          <Input
+            placeholder="请输入您的个性签名"
+            bordered={false}
+            autoComplete="off"
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-button">
