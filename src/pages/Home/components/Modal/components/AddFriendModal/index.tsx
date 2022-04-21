@@ -107,10 +107,14 @@ const AddFriendModal = () => {
     </>
   );
 
-  const FriendListPanel = () => {
-    return (
+  const FriendListPanel = ({ listData }) => {
+    return !listData || listData.length === 0 ? (
+      <div className="modal-addFriend-friendListPanel-emptyList">
+        未查询到您的好友，快去添加吧～
+      </div>
+    ) : (
       <>
-        {friendList.map((item: UserInfo, index: number) => (
+        {listData.map((item: UserInfo, index: number) => (
           <div className="modal-addFriend-item" key={index}>
             <img
               src={item.avatarUrl || ""}
@@ -166,7 +170,7 @@ const AddFriendModal = () => {
       className="modal-addFriend"
     >
       {tab === "" && <AddFriendPanel />}
-      {tab === "friendList" && <FriendListPanel />}
+      {tab === "friendList" && <FriendListPanel listData={friendList} />}
     </Modal>
   );
 };
