@@ -4,6 +4,7 @@ import "./index.less";
 import { Button, Descriptions, Form, Input, message, Modal, Radio } from "antd";
 import Tool from "@/utils/tool";
 import Api from "@/api";
+import classNames from "classnames";
 
 const SexTextObj = {
   0: "未知",
@@ -22,7 +23,7 @@ const ShowDetailModal = () => {
   const [tab, setTab] = useState("");
 
   const MainPanel = () => (
-    <Descriptions className="modal-showDetail" column={1}>
+    <Descriptions className="modal-showDetail-descriptions" column={1}>
       <Descriptions.Item label="头像">
         <img src={userData.avatarUrl} style={{ width: "2rem" }} alt="" />
       </Descriptions.Item>
@@ -144,25 +145,30 @@ const ShowDetailModal = () => {
     <Modal
       title={
         <div className="modal-showDetail-header">
-          <div
-            style={{ cursor: "pointer", whiteSpace: "nowrap" }}
+          <Button
+            type="primary"
             onClick={() => setTab("")}
+            className={classNames(tab === "" && "modal-showDetail-activeTab")}
           >
             详细信息
-          </div>
+          </Button>
           {userData._id === currentUser._id && (
             <>
               <Button
                 type="primary"
-                style={{ marginLeft: "16px" }}
                 onClick={() => setTab("modifyInfo")}
+                className={classNames(
+                  tab === "modifyInfo" && "modal-showDetail-activeTab"
+                )}
               >
                 修改信息
               </Button>
               <Button
                 type="primary"
-                style={{ marginLeft: "16px" }}
                 onClick={() => setTab("modifyPwd")}
+                className={classNames(
+                  tab === "modifyPwd" && "modal-showDetail-activeTab"
+                )}
               >
                 修改密码
               </Button>
@@ -175,6 +181,7 @@ const ShowDetailModal = () => {
       onOk={() => setModal({})}
       centered={true}
       footer={null}
+      className="modal-showDetail"
     >
       {tab === "" && <MainPanel />}
       {tab === "modifyInfo" && <ModifyInfoPanel />}

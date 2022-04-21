@@ -1,8 +1,32 @@
-.modal-showDetail-header {
-  padding-right: 56px;
-  display: flex;
-  align-items: center;
+.modal-showDetail {
+  &-header {
+    padding-right: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-btn {
+    height: 48px;
+    border-radius: 0;
+  }
+  .ant-btn-primary:hover,
+  .ant-btn-primary:focus {
+    color: #000;
+    border: none;
+    background: #fff;
+  }
+  .ant-modal-header {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  &-activeTab {
+    background: #fff;
+    box-shadow: none;
+    border: none;
+    color: #000;
+  }
 }
+
 .modifyInfoPanel-radio {
   padding-left: 11px;
 }

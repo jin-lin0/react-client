@@ -4,6 +4,7 @@ import "./index.less";
 import { Button, Input, Modal, Tabs, Popconfirm } from "antd";
 import { UserInfo } from "@/const/interface";
 import Api from "@/api";
+import classNames from "classnames";
 
 const AddFriendModal = () => {
   const [addFriendList, setAddFriendList] = useState<any>([]);
@@ -139,16 +140,19 @@ const AddFriendModal = () => {
     <Modal
       title={
         <div className="modal-addFriend-header">
-          <div
-            style={{ cursor: "pointer", whiteSpace: "nowrap" }}
-            onClick={() => setTab("")}
-          >
-            添加好友
-          </div>
           <Button
             type="primary"
-            style={{ marginLeft: "16px" }}
+            onClick={() => setTab("")}
+            className={classNames(tab === "" && "modal-addFriend-activeTab")}
+          >
+            添加好友
+          </Button>
+          <Button
+            type="primary"
             onClick={() => setTab("friendList")}
+            className={classNames(
+              tab === "friendList" && "modal-addFriend-activeTab"
+            )}
           >
             好友列表
           </Button>
