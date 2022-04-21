@@ -58,17 +58,17 @@ const AddFriendModal = () => {
       className="modal-addFriend"
     >
       <Tabs defaultActiveKey="1" tabBarStyle={{ border: "none" }}>
-        <Tabs.TabPane key="1" tab="id查询">
-          <Input.Search
-            placeholder="请输入好友的id"
-            onSearch={onSearchUserById}
-            spellCheck={false}
-          />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="2" tab="昵称查询">
+        <Tabs.TabPane key="1" tab="昵称查询">
           <Input.Search
             placeholder="请输入好友的昵称"
             onSearch={onSearchUserByNickname}
+            spellCheck={false}
+          />
+        </Tabs.TabPane>
+        <Tabs.TabPane key="2" tab="id查询">
+          <Input.Search
+            placeholder="请输入好友的id"
+            onSearch={onSearchUserById}
             spellCheck={false}
           />
         </Tabs.TabPane>
