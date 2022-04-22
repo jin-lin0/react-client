@@ -20,7 +20,13 @@ import { SOCKET_URL } from "@/const/config";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
-  const { nickname, avatarUrl, _id: receiveId } = areaData;
+  const {
+    nickname,
+    avatarUrl,
+    _id: receiveId,
+    signature = "",
+    signatureColor = "#fff",
+  } = areaData;
   const { currentUser, socket, setModal } = useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
@@ -145,6 +151,9 @@ const ChatArea = (props) => {
           onClick={onAvatorClick}
         />
         <div className="nickname">{nickname}</div>
+        <div className="signature" style={{ color: signatureColor }}>
+          {signature}
+        </div>
       </header>
       <section className="chat-area-content" ref={contentRef}>
         {listMsg

@@ -5,6 +5,7 @@ import { Button, Descriptions, Form, Input, message, Modal, Radio } from "antd";
 import Tool from "@/utils/tool";
 import Api from "@/api";
 import classNames from "classnames";
+import ColorPopover from "./components/ColorPopover";
 
 const SexTextObj = {
   0: "未知",
@@ -35,7 +36,9 @@ const ShowDetailModal = () => {
         {userData.phone_number}
       </Descriptions.Item>
       <Descriptions.Item label="个性签名">
-        {userData.signature}
+        <span style={{ color: userData.signatureColor }}>
+          {userData.signature}
+        </span>
       </Descriptions.Item>
       <Descriptions.Item label="id">{userData._id}</Descriptions.Item>
       <Descriptions.Item label="注册时间">
@@ -63,7 +66,7 @@ const ShowDetailModal = () => {
       <Form
         onFinish={handleSubmitModifyInfo}
         form={form}
-        labelCol={{ span: 3 }}
+        labelCol={{ span: 5 }}
       >
         <Form.Item name="nickname" label="昵称">
           <Input
@@ -92,6 +95,9 @@ const ShowDetailModal = () => {
             bordered={false}
             autoComplete="off"
           />
+        </Form.Item>
+        <Form.Item name="signatureColor" label="个性签名颜色">
+          <ColorPopover />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-button">
