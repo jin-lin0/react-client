@@ -13,6 +13,7 @@
     display: flex;
     font-size: 1.2rem;
     font-weight: 600;
+    overflow: hidden;
     img {
       margin-right: 0.5rem;
       width: 2rem;
@@ -21,11 +22,12 @@
       cursor: pointer;
     }
     .signature {
-      margin-left: 1.2rem;
-      display: flex;
-      align-items: center;
+      margin: auto 0 auto 1.2rem;
       font-size: 0.8rem;
       font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 

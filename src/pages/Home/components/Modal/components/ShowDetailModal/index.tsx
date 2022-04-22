@@ -91,9 +91,10 @@ const ShowDetailModal = () => {
         </Form.Item>
         <Form.Item name="signature" label="个性签名">
           <Input
-            placeholder="请输入您的个性签名"
+            placeholder="请输入您的个性签名（最长15个字符）"
             bordered={false}
             autoComplete="off"
+            maxLength={15}
           />
         </Form.Item>
         <Form.Item name="signatureColor" label="个性签名颜色">
