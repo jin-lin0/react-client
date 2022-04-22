@@ -1,4 +1,4 @@
-import { message, Popover, Upload } from "antd";
+import { message, Popover, Upload, Image } from "antd";
 import {
   useState,
   useContext,
@@ -7,7 +7,12 @@ import {
   useLayoutEffect,
 } from "react";
 import Picker from "emoji-picker-react";
-import { SmileOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  SmileOutlined,
+  UploadOutlined,
+  PhoneOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
 import { HomeContext } from "@/context";
 import "./index.less";
 import TextArea from "antd/lib/input/TextArea";
@@ -72,7 +77,12 @@ const ChatArea = (props) => {
     });
     setListMsg((list) => [
       ...list,
-      { sender: currentUser._id, receive: receiveId, content: msg },
+      {
+        sender: currentUser._id,
+        receive: receiveId,
+        content: msg,
+        type: "text",
+      },
     ]);
     setMsg("");
     handleScrollBottom();
@@ -80,20 +90,28 @@ const ChatArea = (props) => {
 
   const onChangeUpload = (info) => {
     if (info?.file.status === "done") {
+      const imgMsg = {
+        type: "img",
+        sender: currentUser._id,
+        receive: receiveId,
+        content: `${SOCKET_URL}/upload/${info.file.response.data.filename}`,
+      };
+      socket.emit("sendMsg", imgMsg);
+      setListMsg((list) => [...list, imgMsg]);
+      console.log(info);
       message.success("上传文件成功!");
     }
   };
 
   const onBeforeUpload = (file: RcFile): Promise<boolean> => {
-    const types: string[] = ["md", "doc", "docx", "jpg"];
+    const types: string[] = ["jpg", "png"];
     return new Promise((resolve, reject) => {
-      console.log(file);
       if (!types.includes(Regex.getFileExt(file.name))) {
         message.error(`您只能上传${types.join(",")}类型的文件！`);
         return reject(false);
       }
-      if (file.size / 1024 / 1024 > 1) {
-        message.error("您所传的文件大小应小于1MB！");
+      if (file.size / 1024 / 1024 > 2) {
+        message.error("您所传的文件大小应小于2MB！");
         return reject(false);
       }
       return resolve(true);
@@ -124,8 +142,8 @@ const ChatArea = (props) => {
 
   const MessageItem = (props) => {
     const { msgObj } = props;
-    const { sender = "", content = "" } = msgObj;
-    return (
+    const { sender = "", content = "", type = "text" } = msgObj;
+    const TextMessageItem = () => (
       <div
         className={classNames("message-item", {
           "message-item-self": sender === currentUser._id,
@@ -134,6 +152,22 @@ const ChatArea = (props) => {
         <pre className="message-item-content">{content}</pre>
       </div>
     );
+
+    const ImgMessageItem = () => (
+      <div
+        className={classNames("message-item", {
+          "message-item-self": sender === currentUser._id,
+        })}
+      >
+        <Image width="8rem" src={content} />
+      </div>
+    );
+    switch (type) {
+      case "img":
+        return <ImgMessageItem />;
+      default:
+        return <TextMessageItem />;
+    }
   };
 
   const HintItem = (props) => {
@@ -188,6 +222,14 @@ const ChatArea = (props) => {
               onClick={() => onChangePanel("emoji")}
             />
           </Popover>
+          <PhoneOutlined
+            style={{ fontSize: "1.2rem" }}
+            onClick={() => onChangePanel("phone")}
+          />
+          <VideoCameraOutlined
+            style={{ fontSize: "1.2rem" }}
+            onClick={() => onChangePanel("video")}
+          />
         </div>
         <TextArea
           onChange={onChangeTextare}
