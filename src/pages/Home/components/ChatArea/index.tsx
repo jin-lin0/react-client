@@ -107,7 +107,7 @@ const ChatArea = (props) => {
     const types: string[] = ["jpg", "png"];
     return new Promise((resolve, reject) => {
       if (!types.includes(Regex.getFileExt(file.name))) {
-        message.error(`您只能上传${types.join(",")}类型的文件！`);
+        message.error(`您只能上传${types.join("、")}类型的文件！`);
         return reject(false);
       }
       if (file.size / 1024 / 1024 > 2) {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDrop } from "react-dnd";
 import { HomeContext } from "@/context";
 import HomeHeader from "./components/HomeHeader";
 import ChatList from "./components/ChatList";
@@ -12,6 +13,7 @@ import { message } from "antd";
 import { UserInfo } from "@/const/interface";
 import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
 import AddFriendModal from "./components/Modal/components/AddFriendModal";
+import DraggableAudio from "./components/DraggableAudio";
 
 const Home = (props) => {
   const { socket } = props;
@@ -20,6 +22,16 @@ const Home = (props) => {
   const [activeChatId, setActiveChatId] = useState("");
   const [chatList, setChatList] = useState([]);
   const [modal, setModal] = useState<any>({});
+  const [webRtcShow, setWebRtcShow] = useState("");
+  const [, dropRef] = useDrop({
+    accept: "audio",
+    drop: (item, monitor) => {
+      return {
+        top: monitor.getDifferenceFromInitialOffset()?.y,
+        left: monitor.getDifferenceFromInitialOffset()?.x,
+      };
+    },
+  });
 
   const onChooseChat = (id) => {
     setActiveChatId(id);
@@ -84,7 +96,7 @@ const Home = (props) => {
   }, [curUser, modal]);
 
   return (
-    <div className="home">
+    <div className="home" ref={dropRef}>
       <HomeContext.Provider
         value={{
           currentUser: curUser,
@@ -107,6 +119,7 @@ const Home = (props) => {
 
         {modal.key === "addFriend" && <AddFriendModal />}
         {modal.key === "showDetail" && <ShowDetailModal />}
+        {webRtcShow === "audio" && <DraggableAudio />}
       </HomeContext.Provider>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>
