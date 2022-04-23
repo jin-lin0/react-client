@@ -4,10 +4,12 @@ import "./index.less";
 
 interface DraggableAudioProps {
   avatarUrl?: string;
+  hidden?: boolean;
+  hiddenOpacity?: number;
 }
 
 const DraggableAudio = (props: DraggableAudioProps) => {
-  const { avatarUrl = "" } = props;
+  const { avatarUrl = "", hidden, hiddenOpacity } = props;
   return (
     <DraggableComponent
       type="audio"
@@ -18,6 +20,8 @@ const DraggableAudio = (props: DraggableAudioProps) => {
           <PhoneOutlined style={{ fontSize: "1.3rem", color: "red" }} />
         </div>
       }
+      hidden={hidden}
+      hiddenOpacity={hiddenOpacity}
     />
   );
 };

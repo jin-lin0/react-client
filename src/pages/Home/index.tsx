@@ -105,6 +105,8 @@ const Home = (props) => {
           socket,
           setModal,
           modal,
+          webRtcShow,
+          setWebRtcShow,
         }}
       >
         <HomeHeader />
@@ -119,7 +121,12 @@ const Home = (props) => {
 
         {modal.key === "addFriend" && <AddFriendModal />}
         {modal.key === "showDetail" && <ShowDetailModal />}
-        {webRtcShow === "audio" && <DraggableAudio />}
+        {webRtcShow === "audio" && (
+          <DraggableAudio
+            hidden={modal && Object.keys(modal).length !== 0}
+            hiddenOpacity={0.2}
+          />
+        )}
       </HomeContext.Provider>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>

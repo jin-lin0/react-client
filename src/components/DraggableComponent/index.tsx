@@ -5,6 +5,7 @@ interface DraggableComponentProps {
   type: string;
   id: string;
   hidden?: boolean;
+  hiddenOpacity?: number;
   index?: number;
   top?: string;
   left?: string;
@@ -12,7 +13,16 @@ interface DraggableComponentProps {
 }
 
 const DraggableComponent = (props: DraggableComponentProps) => {
-  const { index = 0, type, id, children, top, left, hidden = false } = props;
+  const {
+    index = 0,
+    type,
+    id,
+    children,
+    top,
+    left,
+    hidden = false,
+    hiddenOpacity = 0,
+  } = props;
   const [, domRef] = useDrag({
     type,
     end(item, monitor) {
@@ -31,7 +41,7 @@ const DraggableComponent = (props: DraggableComponentProps) => {
       ref={domRef}
       className="draggableComponent"
       id={id}
-      style={{ top, left, display: hidden ? "none" : "block" }}
+      style={{ top, left, opacity: hidden ? hiddenOpacity : 1 }}
     >
       {children}
     </div>
