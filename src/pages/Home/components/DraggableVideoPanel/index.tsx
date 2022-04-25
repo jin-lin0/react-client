@@ -105,7 +105,9 @@ const VideoPanel = () => {
   const leaveCall = () => {
     setCallEnded(true);
     if (stream) {
-      stream.getTracks()[0].stop();
+      stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
     }
     setCallAccepted(false);
     setReceivingCall(false);
@@ -127,7 +129,7 @@ const VideoPanel = () => {
               "callAccepted:" + callAccepted + "   callEnded:" + callEnded
             )}
             {callAccepted && !callEnded ? (
-              <video playsInline muted autoPlay ref={userVideo} />
+              <video playsInline autoPlay ref={userVideo} />
             ) : null}
           </div>
         </div>
