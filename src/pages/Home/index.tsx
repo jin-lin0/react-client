@@ -14,6 +14,8 @@ import { UserInfo } from "@/const/interface";
 import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
 import AddFriendModal from "./components/Modal/components/AddFriendModal";
 import DraggableAudio from "./components/DraggableAudio";
+import DraggableVideo from "./components/DraggableVideo";
+import DraggableVideoPanel from "./components/DraggableVideoPanel";
 
 const Home = (props) => {
   const { socket } = props;
@@ -23,6 +25,13 @@ const Home = (props) => {
   const [chatList, setChatList] = useState([]);
   const [modal, setModal] = useState<any>({});
   const [webRtcShow, setWebRtcShow] = useState("");
+  const [rtcChatData, setRtcChatData] = useState({});
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [rtcVideoReceiving, setVideoReceving] = useState(false);
+  const [senderSignal, setSenderSignal] = useState({});
+  const [videoStream, setVideoStream] = useState<any>(null);
+  const [receivingCall, setReceivingCall] = useState(false);
+  const [callerSignal, setCallerSignal] = useState<any>();
   const [, dropRef] = useDrop({
     accept: "audio",
     drop: (item, monitor) => {
@@ -66,6 +75,47 @@ const Home = (props) => {
         message.error("删除好友失败！");
       }
     });
+
+    socket.on("rtcVideoReceive", (data) => {
+      const {
+        senderId,
+        receiveId,
+        senderAvatarUrl,
+        receiveAvatarUrl,
+        senderNickname,
+        signalData,
+      } = data;
+      setVideoReceving(true);
+      setSenderSignal(signalData);
+      console.log(data, "rtcVideoReceive");
+      setRtcChatData({
+        senderId,
+        receiveId,
+        senderAvatarUrl,
+        receiveAvatarUrl,
+        senderNickname,
+      });
+    });
+
+    socket.on("callUser", (data) => {
+      const {
+        senderId,
+        receiveId,
+        senderAvatarUrl,
+        receiveAvatarUrl,
+        senderNickname,
+        signalData,
+      } = data;
+      setReceivingCall(true);
+      setRtcChatData({
+        senderId,
+        receiveId,
+        senderAvatarUrl,
+        receiveAvatarUrl,
+        senderNickname,
+      });
+      setCallerSignal(signalData);
+    });
     socket.on("disconnect", (reason) => {
       console.log(reason);
       FreshToken.delete();
@@ -107,6 +157,20 @@ const Home = (props) => {
           modal,
           webRtcShow,
           setWebRtcShow,
+          rtcChatData,
+          setRtcChatData,
+          rtcVideoReceiving,
+          setVideoReceving,
+          senderSignal,
+          setSenderSignal,
+          callAccepted,
+          setCallAccepted,
+          videoStream,
+          setVideoStream,
+          receivingCall,
+          setReceivingCall,
+          callerSignal,
+          setCallerSignal,
         }}
       >
         <HomeHeader />
@@ -121,12 +185,21 @@ const Home = (props) => {
 
         {modal.key === "addFriend" && <AddFriendModal />}
         {modal.key === "showDetail" && <ShowDetailModal />}
-        {webRtcShow === "audio" && (
+        {/* {webRtcShow === "audio" && (
           <DraggableAudio
             hidden={modal && Object.keys(modal).length !== 0}
             hiddenOpacity={0.2}
+            chatData={rtcChatData}
           />
-        )}
+        )} */}
+        {/* {(webRtcShow === "video" || rtcVideoReceiving) && (
+          <DraggableVideo
+            hidden={modal && Object.keys(modal).length !== 0}
+            hiddenOpacity={0.2}
+            chatData={rtcChatData}
+          />
+        )} */}
+        {(webRtcShow === "video" || receivingCall) && <DraggableVideoPanel />}
       </HomeContext.Provider>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>

@@ -32,7 +32,8 @@ const ChatArea = (props) => {
     signature = "",
     signatureColor = "#fff",
   } = areaData;
-  const { currentUser, socket, setModal } = useContext<any>(HomeContext);
+  const { currentUser, socket, setModal, setWebRtcShow, setRtcChatData } =
+    useContext<any>(HomeContext);
   const [panel, setPanel] = useState("");
   const [msg, setMsg] = useState("");
   const [listMsg, setListMsg] = useState<any>([]);
@@ -224,11 +225,33 @@ const ChatArea = (props) => {
           </Popover>
           <PhoneOutlined
             style={{ fontSize: "1.2rem" }}
-            onClick={() => onChangePanel("phone")}
+            onClick={() => {
+              onChangePanel("phone");
+              setWebRtcShow("audio");
+              setRtcChatData({
+                type: "private",
+                senderId: currentUser._id,
+                senderNickname: currentUser.nickname,
+                receiveId,
+                senderAvatarUrl: currentUser.avatarUrl,
+                receiveAvatarUrl: avatarUrl,
+              });
+            }}
           />
           <VideoCameraOutlined
             style={{ fontSize: "1.2rem" }}
-            onClick={() => onChangePanel("video")}
+            onClick={() => {
+              onChangePanel("video");
+              setWebRtcShow("video");
+              setRtcChatData({
+                type: "private",
+                senderId: currentUser._id,
+                senderNickname: currentUser.nickname,
+                receiveId,
+                senderAvatarUrl: currentUser.avatarUrl,
+                receiveAvatarUrl: avatarUrl,
+              });
+            }}
           />
         </div>
         <TextArea

@@ -1,0 +1,40 @@
+.draggableVideo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  cursor: all-scroll;
+  @media screen and (min-width: 414px) {
+    &-container {
+      display: flex;
+    }
+  }
+  video {
+    border-radius: 10px;
+    height: 16rem;
+    width: 22rem;
+  }
+  .avatar {
+    margin-right: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+  }
+  svg {
+    margin-top: 1rem;
+    cursor: pointer;
+  }
+}
+
+.receiving-video {
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1px solid #fff;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  button {
+    margin-top: 10px;
+  }
+}
