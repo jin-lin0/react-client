@@ -145,12 +145,13 @@ const VideoPanel = () => {
             </Button>
           )}
           {!callAccepted && !receivingCall && (
-            <VideoCameraOutlined
-              style={{ fontSize: "1.3rem", color: "#17ea17" }}
-              onClick={() => {
-                callUser();
-              }}
-            />
+            <Button
+              type="primary"
+              style={{ background: "#17ea17", borderRadius: "1rem" }}
+              onClick={callUser}
+            >
+              {callEnded ? "拨打" : "拨打中..."}
+            </Button>
           )}
         </div>
         <div>
