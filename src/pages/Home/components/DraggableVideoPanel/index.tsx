@@ -145,13 +145,31 @@ const VideoPanel = () => {
             </Button>
           )}
           {!callAccepted && !receivingCall && (
-            <Button
-              type="primary"
-              style={{ background: "#17ea17", borderRadius: "1rem" }}
-              onClick={callUser}
-            >
-              {callEnded ? "拨打" : "拨打中..."}
-            </Button>
+            <>
+              <Button
+                type="primary"
+                style={{ background: "#17ea17", borderRadius: "1rem" }}
+                onClick={callUser}
+              >
+                {callEnded ? "拨打" : "拨打中..."}
+              </Button>
+              {callEnded && (
+                <Button
+                  type="primary"
+                  style={{
+                    background: "red",
+                    borderRadius: "1rem",
+                    marginLeft: "1rem",
+                  }}
+                  onClick={() => {
+                    setWebRtcShow("");
+                    setRtcChatData({});
+                  }}
+                >
+                  取消
+                </Button>
+              )}
+            </>
           )}
         </div>
         <div>
@@ -165,7 +183,7 @@ const VideoPanel = () => {
                 style={{ background: "#2acd2a", borderRadius: "1rem" }}
                 onClick={answerCall}
               >
-                同意接听
+                同意
               </Button>
             </div>
           ) : null}
