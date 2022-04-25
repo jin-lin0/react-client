@@ -102,13 +102,17 @@ const VideoPanel = () => {
     connectionRef.current = peer;
   };
 
-  const leaveCall = () => {
-    setCallEnded(true);
+  const closeLocalStream = () => {
     if (stream) {
       stream.getTracks().forEach(function (track) {
         track.stop();
       });
     }
+  };
+
+  const leaveCall = () => {
+    setCallEnded(true);
+    closeLocalStream();
     setCallAccepted(false);
     setReceivingCall(false);
     socket.off("callAccepted");
@@ -164,6 +168,7 @@ const VideoPanel = () => {
                     marginLeft: "1rem",
                   }}
                   onClick={() => {
+                    closeLocalStream();
                     setWebRtcShow("");
                     setRtcChatData({});
                   }}
