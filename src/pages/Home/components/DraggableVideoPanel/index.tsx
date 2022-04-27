@@ -139,9 +139,18 @@ const VideoPanel = () => {
             ) : null}
           </div>
         </div>
-        <PhoneOutlined
-          style={{ color: "#17ea17", fontSize: "2rem", marginBottom: "1rem" }}
-        />
+        {webRtcShow === "audio" && (
+          <img
+            src={
+              currentUser._id === rtcChatData.senderId
+                ? rtcChatData.receiveAvatarUrl
+                : rtcChatData.senderAvatarUrl
+            }
+            alt=""
+            className="videoPanel-avatar"
+          />
+        )}
+
         <div className="videoPanel-footer">
           {callAccepted && !callEnded && (
             <Button
