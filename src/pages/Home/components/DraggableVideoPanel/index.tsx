@@ -1,6 +1,6 @@
 import { HomeContext } from "@/context";
 import { Button } from "antd";
-import { VideoCameraOutlined } from "@ant-design/icons";
+import { PhoneOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useRef, useState } from "react";
 import Peer from "simple-peer";
 import DraggableComponent from "@/components/DraggableComponent";
@@ -12,13 +12,7 @@ const VideoPanel = () => {
     rtcChatData,
     setRtcChatData,
     currentUser,
-    senderSignal,
-    setSenderSignal,
-    setCallAccepted,
-    rtcVideoReceiving,
-    setVideoReceving,
-    videoStream,
-    setVideoStream,
+    webRtcShow,
     receivingCall,
     setReceivingCall,
     callerSignal,
@@ -26,11 +20,16 @@ const VideoPanel = () => {
     setWebRtcShow,
   } = useContext<any>(HomeContext);
   const [stream, setStream] = useState<any>();
-  const [callAccepted, setCallAcceted] = useState(false);
+  const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(true);
   const myVideo = useRef<any>();
   const userVideo = useRef<any>();
   const connectionRef = useRef<any>();
+
+  const webRtcShowText = {
+    video: "视频通话",
+    audio: "语音通话",
+  };
 
   const {
     senderId,
@@ -41,7 +40,10 @@ const VideoPanel = () => {
   } = rtcChatData;
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
+      .getUserMedia({
+        audio: true,
+        video: webRtcShow === "video" ? true : false,
+      })
       .then((stream) => {
         setStream(stream);
         if (myVideo.current) {
@@ -71,7 +73,7 @@ const VideoPanel = () => {
 
     socket.on("callAccepted", (signal) => {
       console.log("callAccepted", signal);
-      setCallAcceted(true);
+      setCallAccepted(true);
       peer.signal(signal);
     });
 
@@ -80,7 +82,7 @@ const VideoPanel = () => {
 
   const answerCall = () => {
     setCallEnded(false);
-    setCallAcceted(true);
+    setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
       stream: stream,
@@ -125,10 +127,10 @@ const VideoPanel = () => {
     <>
       <div className="videoPanel">
         <div className="videoPanel-video">
-          <div className="video">
+          <div className="video" hidden={webRtcShow === "audio"}>
             {stream && <video playsInline muted autoPlay ref={myVideo} />}
           </div>
-          <div className="video">
+          <div className="video" hidden={webRtcShow === "audio"}>
             {console.log(
               "callAccepted:" + callAccepted + "   callEnded:" + callEnded
             )}
@@ -137,6 +139,9 @@ const VideoPanel = () => {
             ) : null}
           </div>
         </div>
+        <PhoneOutlined
+          style={{ color: "#17ea17", fontSize: "2rem", marginBottom: "1rem" }}
+        />
         <div className="videoPanel-footer">
           {callAccepted && !callEnded && (
             <Button
@@ -183,7 +188,7 @@ const VideoPanel = () => {
           {receivingCall && !callAccepted ? (
             <div className="videoPanel-caller">
               <div className="videoPanel-caller-text">
-                {senderNickname}邀请您视频通话...
+                {senderNickname}邀请您{webRtcShowText[webRtcShow]}...
               </div>
               <Button
                 type="primary"

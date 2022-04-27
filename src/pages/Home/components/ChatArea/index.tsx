@@ -229,7 +229,7 @@ const ChatArea = (props) => {
               onChangePanel("phone");
               setWebRtcShow("audio");
               setRtcChatData({
-                type: "private",
+                type: "audio",
                 senderId: currentUser._id,
                 senderNickname: currentUser.nickname,
                 receiveId,
@@ -244,7 +244,7 @@ const ChatArea = (props) => {
               onChangePanel("video");
               setWebRtcShow("video");
               setRtcChatData({
-                type: "private",
+                type: "video",
                 senderId: currentUser._id,
                 senderNickname: currentUser.nickname,
                 receiveId,

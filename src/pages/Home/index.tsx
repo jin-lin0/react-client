@@ -13,8 +13,6 @@ import { message } from "antd";
 import { UserInfo } from "@/const/interface";
 import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
 import AddFriendModal from "./components/Modal/components/AddFriendModal";
-import DraggableAudio from "./components/DraggableAudio";
-import DraggableVideo from "./components/DraggableVideo";
 import DraggableVideoPanel from "./components/DraggableVideoPanel";
 
 const Home = (props) => {
@@ -26,10 +24,6 @@ const Home = (props) => {
   const [modal, setModal] = useState<any>({});
   const [webRtcShow, setWebRtcShow] = useState("");
   const [rtcChatData, setRtcChatData] = useState({});
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [rtcVideoReceiving, setVideoReceving] = useState(false);
-  const [senderSignal, setSenderSignal] = useState({});
-  const [videoStream, setVideoStream] = useState<any>(null);
   const [receivingCall, setReceivingCall] = useState(false);
   const [callerSignal, setCallerSignal] = useState<any>();
   const [, dropRef] = useDrop({
@@ -85,8 +79,8 @@ const Home = (props) => {
         senderNickname,
         signalData,
       } = data;
-      setVideoReceving(true);
-      setSenderSignal(signalData);
+      // setVideoReceving(true);
+      // setSenderSignal(signalData);
       console.log(data, "rtcVideoReceive");
       setRtcChatData({
         senderId,
@@ -99,6 +93,7 @@ const Home = (props) => {
 
     socket.on("callUser", (data) => {
       const {
+        type,
         senderId,
         receiveId,
         senderAvatarUrl,
@@ -106,8 +101,10 @@ const Home = (props) => {
         senderNickname,
         signalData,
       } = data;
+      setWebRtcShow(type);
       setReceivingCall(true);
       setRtcChatData({
+        type,
         senderId,
         receiveId,
         senderAvatarUrl,
@@ -159,14 +156,6 @@ const Home = (props) => {
           setWebRtcShow,
           rtcChatData,
           setRtcChatData,
-          rtcVideoReceiving,
-          setVideoReceving,
-          senderSignal,
-          setSenderSignal,
-          callAccepted,
-          setCallAccepted,
-          videoStream,
-          setVideoStream,
           receivingCall,
           setReceivingCall,
           callerSignal,
@@ -192,14 +181,9 @@ const Home = (props) => {
             chatData={rtcChatData}
           />
         )} */}
-        {/* {(webRtcShow === "video" || rtcVideoReceiving) && (
-          <DraggableVideo
-            hidden={modal && Object.keys(modal).length !== 0}
-            hiddenOpacity={0.2}
-            chatData={rtcChatData}
-          />
-        )} */}
-        {(webRtcShow === "video" || receivingCall) && <DraggableVideoPanel />}
+        {(webRtcShow === "video" ||
+          webRtcShow === "audio" ||
+          receivingCall) && <DraggableVideoPanel />}
       </HomeContext.Provider>
       <LogoutOutlined className="home-logout" onClick={handleLogout} />
     </div>
