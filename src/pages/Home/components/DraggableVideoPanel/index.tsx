@@ -1,5 +1,5 @@
 import { HomeContext } from "@/context";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { PhoneOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useRef, useState } from "react";
 import Peer from "simple-peer";
@@ -59,6 +59,10 @@ const VideoPanel = () => {
       stream: stream,
       trickle: false,
     });
+    peer.on("close", () => {
+      leaveCall();
+      message.info(`${webRtcShowText[webRtcShow]}已经断开～`);
+    });
     peer.on("signal", (data) => {
       socket.emit("callUser", {
         ...rtcChatData,
@@ -87,6 +91,10 @@ const VideoPanel = () => {
       initiator: false,
       stream: stream,
       trickle: false,
+    });
+    peer.on("close", () => {
+      leaveCall();
+      message.info(`${webRtcShowText[webRtcShow]}已经断开～`);
     });
 
     peer.on("signal", (data) => {
