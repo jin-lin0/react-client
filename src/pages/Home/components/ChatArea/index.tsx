@@ -1,4 +1,4 @@
-import { message, Popover, Upload, Image } from "antd";
+import { message, Popover, Upload, Image, Empty } from "antd";
 import {
   useState,
   useContext,
@@ -22,6 +22,7 @@ import { LoginToken } from "@/utils/token";
 import { RcFile } from "antd/lib/upload";
 import Regex from "@/utils/regex";
 import { SOCKET_URL } from "@/const/config";
+import { MessageTwoTone } from "@ant-design/icons";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
@@ -138,7 +139,9 @@ const ChatArea = (props) => {
   }, [receiveId]);
 
   useLayoutEffect(() => {
-    handleScrollBottom();
+    if (receiveId) {
+      handleScrollBottom();
+    }
   }, [receiveId]);
 
   const MessageItem = (props) => {
@@ -176,7 +179,7 @@ const ChatArea = (props) => {
     return <div className="hint-item">- {nickname} 进来了 -</div>;
   };
 
-  return (
+  return areaData && Object.keys(areaData).length > 0 ? (
     <div className="chat-area">
       <header>
         <img
@@ -264,6 +267,11 @@ const ChatArea = (props) => {
           发送
         </div>
       </footer>
+    </div>
+  ) : (
+    <div className="chat-area-empty">
+      <MessageTwoTone style={{ fontSize: "5rem" }} />
+      <div className="chat-area-empty-text">Welcome to join our chat!</div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import { HomeContext } from "@/context";
 import { Button, message } from "antd";
-import { PhoneOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useRef, useState } from "react";
 import Peer from "simple-peer";
 import DraggableComponent from "@/components/DraggableComponent";
@@ -18,8 +17,11 @@ const VideoPanel = () => {
     callerSignal,
     setCallerSignal,
     setWebRtcShow,
+    stream,
+    setStream,
+    closeLocalStream,
   } = useContext<any>(HomeContext);
-  const [stream, setStream] = useState<any>();
+
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(true);
   const myVideo = useRef<any>();
@@ -50,6 +52,7 @@ const VideoPanel = () => {
           myVideo.current.srcObject = stream;
         }
       });
+    return closeLocalStream();
   }, []);
 
   const callUser = () => {
@@ -71,8 +74,9 @@ const VideoPanel = () => {
     });
 
     peer.on("stream", (stream) => {
-      console.log("stream", stream);
-      userVideo.current.srcObject = stream;
+      if (stream && userVideo.current) {
+        userVideo.current.srcObject = stream;
+      }
     });
 
     socket.on("callAccepted", (signal) => {
@@ -112,14 +116,6 @@ const VideoPanel = () => {
     connectionRef.current = peer;
   };
 
-  const closeLocalStream = () => {
-    if (stream) {
-      stream.getTracks().forEach(function (track) {
-        track.stop();
-      });
-    }
-  };
-
   const leaveCall = () => {
     setCallEnded(true);
     closeLocalStream();
@@ -136,15 +132,22 @@ const VideoPanel = () => {
       <div className="videoPanel">
         <div className="videoPanel-video">
           <div className="video" hidden={webRtcShow === "audio"}>
-            {stream && <video playsInline muted autoPlay ref={myVideo} />}
+            <video
+              playsInline
+              muted
+              autoPlay
+              ref={myVideo}
+              hidden={!stream || (receivingCall && !callAccepted)}
+            />
           </div>
+
           <div className="video" hidden={webRtcShow === "audio"}>
-            {console.log(
-              "callAccepted:" + callAccepted + "   callEnded:" + callEnded
-            )}
-            {callAccepted && !callEnded ? (
-              <video playsInline autoPlay ref={userVideo} />
-            ) : null}
+            <video
+              playsInline
+              autoPlay
+              ref={userVideo}
+              hidden={!callAccepted || callEnded}
+            />
           </div>
         </div>
         {webRtcShow === "audio" && (

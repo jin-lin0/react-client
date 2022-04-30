@@ -26,6 +26,7 @@ const Home = (props) => {
   const [rtcChatData, setRtcChatData] = useState({});
   const [receivingCall, setReceivingCall] = useState(false);
   const [callerSignal, setCallerSignal] = useState<any>();
+  const [stream, setStream] = useState<any>();
   const [, dropRef] = useDrop({
     accept: "audio",
     drop: (item, monitor) => {
@@ -36,6 +37,13 @@ const Home = (props) => {
     },
   });
 
+  const closeLocalStream = () => {
+    if (stream) {
+      stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
+    }
+  };
   const onChooseChat = (id) => {
     setActiveChatId(id);
   };
@@ -113,6 +121,14 @@ const Home = (props) => {
       });
       setCallerSignal(signalData);
     });
+
+    socket.on("callUserError", (data) => {
+      message.error("当前用户不在线！");
+      closeLocalStream();
+      setStream("");
+      setWebRtcShow("");
+      setRtcChatData({});
+    });
     socket.on("disconnect", (reason) => {
       console.log(reason);
       FreshToken.delete();
@@ -160,6 +176,9 @@ const Home = (props) => {
           setReceivingCall,
           callerSignal,
           setCallerSignal,
+          stream,
+          setStream,
+          closeLocalStream,
         }}
       >
         <HomeHeader />
@@ -174,13 +193,6 @@ const Home = (props) => {
 
         {modal.key === "addFriend" && <AddFriendModal />}
         {modal.key === "showDetail" && <ShowDetailModal />}
-        {/* {webRtcShow === "audio" && (
-          <DraggableAudio
-            hidden={modal && Object.keys(modal).length !== 0}
-            hiddenOpacity={0.2}
-            chatData={rtcChatData}
-          />
-        )} */}
         {(webRtcShow === "video" ||
           webRtcShow === "audio" ||
           receivingCall) && <DraggableVideoPanel />}
