@@ -31,6 +31,12 @@ const HomeHeader = () => {
       >
         好友管理
       </div>
+      <div
+        className="home-header-groupManage"
+        onClick={() => setModal({ key: "groupManage" })}
+      >
+        群组管理
+      </div>
     </div>
   );
 };

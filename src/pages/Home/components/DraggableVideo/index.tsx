@@ -74,10 +74,6 @@ const DraggableVideo = (props: DraggableVideoProps) => {
     });
 
     peer.on("stream", (stream) => {
-      console.log(
-        stream,
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      );
       draggableVideo2Ref.current.srcObject = stream;
     });
 

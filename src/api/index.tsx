@@ -21,6 +21,12 @@ interface UpdateMyInfo {
   sex: number;
 }
 
+interface CreateGroupInfo {
+  nickname: string;
+  notice: string;
+  owner: string;
+}
+
 const Api = {
   login: (LoginInfo: LoginInfo) =>
     request({ url: "/user/login", method: "POST", params: LoginInfo }),
@@ -45,6 +51,13 @@ const Api = {
     request({ url: "/friend/getMy", params: { id } }),
   getPrivate: (userAId: string, userBId: string, number = 30) =>
     request({ url: "/msg/getPrivate", params: { userAId, userBId, number } }),
+  createGroup: (params: CreateGroupInfo) =>
+    request({ url: "/group/create", method: "POST", params }),
+  getMyGroup: () => request({ url: "/group/getMy" }),
+  findGroupByNickname: (nickname: string) =>
+    request({ url: "/group/findByNickname", params: { nickname } }),
+  findGroupById: (id: string) =>
+    request({ url: "/group/findById", params: { id } }),
 };
 
 export default Api;

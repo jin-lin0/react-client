@@ -1,0 +1,75 @@
+@ColorDeepPurple: #4b4176;
+@bgColor: #5143886b;
+.modal-groupManage {
+  &-header {
+    padding-right: 56px;
+    display: flex;
+    align-items: center;
+    .ant-btn {
+      height: 48px;
+      border-radius: 0;
+    }
+    .ant-btn-primary:hover,
+    .ant-btn-primary:focus {
+      color: #fff;
+      border: none;
+      background: #3c3265;
+    }
+  }
+
+  .ant-modal-header {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .ant-tabs-top > .ant-tabs-nav:before {
+    border-bottom: transparent;
+  }
+  &-inactiveTab {
+    background: #fff;
+    box-shadow: none;
+    border: none;
+    color: #000;
+  }
+  .modal-addGroup-item {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 2rem;
+      height: 2rem;
+      margin-right: 2rem;
+      border-radius: 50%;
+    }
+
+    &-content {
+      flex: 1;
+    }
+    &-nickname {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: @ColorDeepPurple;
+    }
+
+    &-id {
+      color: @bgColor;
+    }
+
+    &-button {
+      padding: 0.2rem 0.6rem;
+      border: 1px groove @ColorDeepPurple;
+      border-radius: 10%;
+      font-weight: 700;
+      cursor: pointer;
+      transition-duration: 0.3s;
+      background-color: transparent;
+      color: @ColorDeepPurple;
+    }
+  }
+
+  &-addGroup {
+    .ant-modal-body {
+      padding-top: 0;
+    }
+  }
+}

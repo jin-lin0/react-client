@@ -14,13 +14,14 @@ import { UserInfo } from "@/const/interface";
 import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
 import AddFriendModal from "./components/Modal/components/AddFriendModal";
 import DraggableVideoPanel from "./components/DraggableVideoPanel";
+import GroupManageModal from "./components/Modal/components/GroupManageModal";
 
 const Home = (props) => {
   const { socket } = props;
   const navigate = useNavigate();
   const [curUser, setCurUser] = useState<any>({});
   const [activeChatId, setActiveChatId] = useState("");
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<any>([]);
   const [modal, setModal] = useState<any>({});
   const [webRtcShow, setWebRtcShow] = useState("");
   const [rtcChatData, setRtcChatData] = useState({});
@@ -152,11 +153,28 @@ const Home = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const chatlist = await Api.getMyFriends(curUser._id);
-      setChatList(chatlist);
+      const chatlist = await Api.getMyFriends(curUser._id).then((data) =>
+        Promise.resolve(
+          data.map((item) => {
+            return { ...item, infoType: "user" };
+          })
+        )
+      );
+      const groupChatlist = await Api.getMyGroup().then((data) =>
+        Promise.resolve(
+          data.map((item) => {
+            return { ...item, infoType: "group" };
+          })
+        )
+      );
+
+      setChatList([...chatlist, ...groupChatlist]);
     };
     fetchData();
   }, [curUser, modal]);
+
+  const selectData =
+    chatList.find((item: UserInfo) => item._id === activeChatId) || {};
 
   return (
     <div className="home" ref={dropRef}>
@@ -184,15 +202,12 @@ const Home = (props) => {
         <HomeHeader />
         <div className="home-container">
           <ChatList onChooseChat={onChooseChat} data={chatList} />
-          <ChatArea
-            data={
-              chatList.find((item: UserInfo) => item._id === activeChatId) || {}
-            }
-          />
+          <ChatArea data={selectData} />
         </div>
 
         {modal.key === "addFriend" && <AddFriendModal />}
         {modal.key === "showDetail" && <ShowDetailModal />}
+        {modal.key === "groupManage" && <GroupManageModal />}
         {(webRtcShow === "video" ||
           webRtcShow === "audio" ||
           receivingCall) && <DraggableVideoPanel />}

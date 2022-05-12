@@ -1,4 +1,4 @@
-import { message, Popover, Upload, Image, Empty } from "antd";
+import { message, Popover, Upload, Image } from "antd";
 import {
   useState,
   useContext,
@@ -23,6 +23,7 @@ import { RcFile } from "antd/lib/upload";
 import Regex from "@/utils/regex";
 import { SOCKET_URL } from "@/const/config";
 import { MessageTwoTone } from "@ant-design/icons";
+import ColorAvatar from "@/components/ColorAvatar";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
@@ -32,6 +33,7 @@ const ChatArea = (props) => {
     _id: receiveId,
     signature = "",
     signatureColor = "#fff",
+    infoType = "user",
   } = areaData;
   const { currentUser, socket, setModal, setWebRtcShow, setRtcChatData } =
     useContext<any>(HomeContext);
@@ -43,7 +45,7 @@ const ChatArea = (props) => {
   const onAvatorClick = async () => {
     if (receiveId) {
       const modalData = await Api.getInfo(receiveId);
-      setModal({ key: "showDetail", data: modalData });
+      setModal({ key: "showGroupDetail", data: modalData });
     }
   };
 
@@ -182,12 +184,17 @@ const ChatArea = (props) => {
   return areaData && Object.keys(areaData).length > 0 ? (
     <div className="chat-area">
       <header>
-        <img
-          src={avatarUrl}
-          alt=""
-          className="avatar"
-          onClick={onAvatorClick}
-        />
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt=""
+            className="avatar"
+            onClick={onAvatorClick}
+          />
+        ) : (
+          <ColorAvatar nickname={nickname} onClick={onAvatorClick} />
+        )}
+
         <div className="nickname">{nickname}</div>
         <div className="signature" style={{ color: signatureColor }}>
           {signature}

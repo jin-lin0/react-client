@@ -2,10 +2,28 @@
   max-height: 85vh;
   overflow-y: auto;
   color: #fff;
+  @media screen and (max-width: 414px) {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin: 0 0 0 6px;
+    }
+  }
+  .ant-tabs {
+    color: #fff;
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn,
+  .ant-tabs-tab-btn:focus {
+    color: #cbffcb;
+  }
+  .ant-tabs-top > .ant-tabs-nav:before {
+    border-bottom: transparent;
+  }
+  .ant-tabs-ink-bar {
+    background: #cbffcb;
+  }
+
   &-search {
     input {
       border: none;
-      margin-top: 0.5rem;
       caret-color: #fff;
       color: #fff;
       background: transparent;
@@ -20,6 +38,7 @@
     cursor: pointer;
     transition-duration: 0.3s;
     border-radius: 4px;
+    color: #fff;
     img {
       margin-right: 1rem;
       width: 2rem;
