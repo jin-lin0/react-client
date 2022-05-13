@@ -24,6 +24,7 @@ import Regex from "@/utils/regex";
 import { SOCKET_URL } from "@/const/config";
 import { MessageTwoTone } from "@ant-design/icons";
 import ColorAvatar from "@/components/ColorAvatar";
+import EmptyArea from "./components/EmptyArea";
 
 const ChatArea = (props) => {
   const { data: areaData } = props;
@@ -276,10 +277,7 @@ const ChatArea = (props) => {
       </footer>
     </div>
   ) : (
-    <div className="chat-area-empty">
-      <MessageTwoTone style={{ fontSize: "5rem" }} />
-      <div className="chat-area-empty-text">Welcome to join our chat!</div>
-    </div>
+    <EmptyArea />
   );
 };
 
