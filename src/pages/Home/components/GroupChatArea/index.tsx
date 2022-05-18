@@ -7,12 +7,7 @@ import {
   useLayoutEffect,
 } from "react";
 import Picker from "emoji-picker-react";
-import {
-  SmileOutlined,
-  UploadOutlined,
-  PhoneOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
+import { SmileOutlined, UploadOutlined } from "@ant-design/icons";
 import { HomeContext } from "@/context";
 import "./index.less";
 import TextArea from "antd/lib/input/TextArea";
@@ -23,9 +18,8 @@ import { RcFile } from "antd/lib/upload";
 import Regex from "@/utils/regex";
 import { SOCKET_URL } from "@/const/config";
 import ColorAvatar from "@/components/ColorAvatar";
-import EmptyArea from "./components/EmptyArea";
 
-const ChatArea = (props) => {
+const GroupChatArea = (props) => {
   const { data: areaData } = props;
   const {
     nickname,
@@ -73,17 +67,21 @@ const ChatArea = (props) => {
 
   const onSendMsg = () => {
     if (msg === "") return;
-    socket.emit("sendMsg", {
+    socket.emit("sendGroupMsg", {
       type: "text",
       sender: currentUser._id,
-      receive: receiveId,
+      senderAvatar: currentUser.avatarUrl,
+      senderNickname: currentUser.nickname,
+      groupId: receiveId,
       content: msg,
     });
     setListMsg((list) => [
       ...list,
       {
         sender: currentUser._id,
-        receive: receiveId,
+        groupId: receiveId,
+        senderAvatar: currentUser.avatarUrl,
+        senderNickname: currentUser.nickname,
         content: msg,
         type: "text",
       },
@@ -97,10 +95,10 @@ const ChatArea = (props) => {
       const imgMsg = {
         type: "img",
         sender: currentUser._id,
-        receive: receiveId,
+        groupId: receiveId,
         content: `${SOCKET_URL}/upload/${info.file.response.data.filename}`,
       };
-      socket.emit("sendMsg", imgMsg);
+      socket.emit("sendGroupMsg", imgMsg);
       setListMsg((list) => [...list, imgMsg]);
       console.log(info);
       message.success("上传文件成功!");
@@ -124,15 +122,16 @@ const ChatArea = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await Api.getPrivate(currentUser._id, receiveId);
+      const data = await Api.getGroupMsg(currentUser._id, receiveId);
       if (data) {
         setListMsg(data);
       } else {
         setListMsg([]);
       }
     };
-    if (!socket._callbacks.$receiveMsg) {
-      socket.on("receiveMsg", (data) => {
+    if (!socket._callbacks.$receiveGroupMsg) {
+      socket.on("receiveGroupMsg", (data) => {
+        console.log({ data, listMsg });
         setListMsg((list) => [...list, data]);
       });
     }
@@ -148,13 +147,23 @@ const ChatArea = (props) => {
 
   const MessageItem = (props) => {
     const { msgObj } = props;
-    const { sender = "", content = "", type = "text" } = msgObj;
+    const {
+      sender = "",
+      content = "",
+      type = "text",
+      senderAvatar = "",
+    } = msgObj;
     const TextMessageItem = () => (
       <div
         className={classNames("message-item", {
           "message-item-self": sender === currentUser._id,
         })}
       >
+        <img
+          src={senderAvatar}
+          alt=""
+          style={{ width: "2rem", height: "2rem", margin: "0 .5rem" }}
+        />
         <pre className="message-item-content">{content}</pre>
       </div>
     );
@@ -181,7 +190,7 @@ const ChatArea = (props) => {
     return <div className="hint-item">- {nickname} 进来了 -</div>;
   };
 
-  return areaData && Object.keys(areaData).length > 0 ? (
+  return (
     <div className="chat-area">
       <header>
         {avatarUrl ? (
@@ -196,15 +205,14 @@ const ChatArea = (props) => {
         )}
 
         <div className="nickname">{nickname}</div>
-        <div className="signature" style={{ color: signatureColor }}>
-          {signature}
-        </div>
       </header>
-      <section className="chat-area-content" ref={contentRef}>
+      <section
+        className="chat-area-content"
+        ref={contentRef}
+        style={{ padding: "0" }}
+      >
         {listMsg
-          .filter(
-            (item) => item.sender === receiveId || item.receive === receiveId
-          )
+          .filter((item) => item.groupId === receiveId)
           .map((msgItem, index) => (
             <MessageItem msgObj={msgItem} key={index} />
           ))}
@@ -233,36 +241,6 @@ const ChatArea = (props) => {
               onClick={() => onChangePanel("emoji")}
             />
           </Popover>
-          <PhoneOutlined
-            style={{ fontSize: "1.2rem" }}
-            onClick={() => {
-              onChangePanel("phone");
-              setWebRtcShow("audio");
-              setRtcChatData({
-                type: "audio",
-                senderId: currentUser._id,
-                senderNickname: currentUser.nickname,
-                receiveId,
-                senderAvatarUrl: currentUser.avatarUrl,
-                receiveAvatarUrl: avatarUrl,
-              });
-            }}
-          />
-          <VideoCameraOutlined
-            style={{ fontSize: "1.2rem" }}
-            onClick={() => {
-              onChangePanel("video");
-              setWebRtcShow("video");
-              setRtcChatData({
-                type: "video",
-                senderId: currentUser._id,
-                senderNickname: currentUser.nickname,
-                receiveId,
-                senderAvatarUrl: currentUser.avatarUrl,
-                receiveAvatarUrl: avatarUrl,
-              });
-            }}
-          />
         </div>
         <TextArea
           onChange={onChangeTextare}
@@ -275,9 +253,7 @@ const ChatArea = (props) => {
         </div>
       </footer>
     </div>
-  ) : (
-    <EmptyArea />
   );
 };
 
-export default ChatArea;
+export default GroupChatArea;

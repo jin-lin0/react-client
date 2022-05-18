@@ -51,6 +51,8 @@ const Api = {
     request({ url: "/friend/getMy", params: { id } }),
   getPrivate: (userAId: string, userBId: string, number = 30) =>
     request({ url: "/msg/getPrivate", params: { userAId, userBId, number } }),
+  getGroupMsg: (userId: string, groupId: string, number = 30) =>
+    request({ url: "/group/getMsg", params: { userId, groupId, number } }),
   createGroup: (params: CreateGroupInfo) =>
     request({ url: "/group/create", method: "POST", params }),
   getMyGroup: () => request({ url: "/group/getMy" }),

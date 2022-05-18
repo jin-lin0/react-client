@@ -15,6 +15,7 @@ import ShowDetailModal from "./components/Modal/components/ShowDetailModal";
 import AddFriendModal from "./components/Modal/components/AddFriendModal";
 import DraggableVideoPanel from "./components/DraggableVideoPanel";
 import GroupManageModal from "./components/Modal/components/GroupManageModal";
+import GroupChatArea from "./components/GroupChatArea";
 
 const Home = (props) => {
   const { socket } = props;
@@ -70,12 +71,28 @@ const Home = (props) => {
         message.error("TA已经是您的好友了～");
       }
     });
+    socket.on("addGroupSuccess", (data) => {
+      if (data) {
+        message.success("添加群组成功");
+        setModal({});
+      } else {
+        message.error("该群组已经添加了～");
+      }
+    });
     socket.on("deleteFriendSuccess", (data) => {
       if (data) {
         message.success("删除好友成功");
         setModal({});
       } else {
         message.error("删除好友失败！");
+      }
+    });
+    socket.on("deleteGroupSuccess", (data) => {
+      if (data) {
+        message.success("退出群组成功");
+        setModal({});
+      } else {
+        message.error("退出群组失败～");
       }
     });
 
@@ -202,7 +219,11 @@ const Home = (props) => {
         <HomeHeader />
         <div className="home-container">
           <ChatList onChooseChat={onChooseChat} data={chatList} />
-          <ChatArea data={selectData} />
+          {selectData.infoType === "group" ? (
+            <GroupChatArea data={selectData} />
+          ) : (
+            <ChatArea data={selectData} />
+          )}
         </div>
 
         {modal.key === "addFriend" && <AddFriendModal />}

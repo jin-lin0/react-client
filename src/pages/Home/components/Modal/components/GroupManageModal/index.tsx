@@ -1,11 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import { HomeContext } from "@/context";
 import "./index.less";
-import { Button, Input, Modal, Tabs, Popconfirm, Form, message } from "antd";
+import {
+  Button,
+  Input,
+  Modal,
+  Tabs,
+  Popconfirm,
+  Form,
+  message,
+  Card,
+} from "antd";
 import { UserInfo } from "@/const/interface";
 import Api from "@/api";
 import classNames from "classnames";
 import ColorAvatar from "@/components/ColorAvatar";
+import Color from "@/utils/color";
 
 const { TextArea } = Input;
 
@@ -46,10 +56,10 @@ const GroupManageModal = () => {
     Api.findGroupById(v).then((data) => console.log(data));
   };
   const handleAddGroup = (id: string) => {
-    // socket.emit("addFriend", {
-    //   userBuild: currentUser._id,
-    //   userReceive: id,
-    // });
+    socket.emit("addGroup", {
+      user: currentUser._id,
+      group: id,
+    });
   };
 
   const CreateGroupPanel = () => {
@@ -128,6 +138,54 @@ const GroupManageModal = () => {
     );
   };
 
+  const MyGroupPanel = () => {
+    const gridStyle = { width: "50%", height: "10rem" };
+    const [list, setList] = useState<any>([]);
+
+    const onDeleteGroup = (_id: string) => {
+      socket.emit("deleteGroup", { userId: currentUser._id, groupId: _id });
+    };
+    useEffect(() => {
+      Api.getMyGroup().then((data) => {
+        console.log(data);
+        setList(data);
+      });
+    }, []);
+    return (
+      <div className="modal-myGroup">
+        <Card className="modal-myGroup-card">
+          {list.length === 0
+            ? "未查询到您的群组，快去添加吧～"
+            : list?.map((item) => {
+                return (
+                  <Card.Grid
+                    style={gridStyle}
+                    key={item.id}
+                    className="modal-myGroup-item"
+                  >
+                    <div
+                      className="nickname"
+                      style={{ color: Color.stringToHex(item.nickname) }}
+                    >
+                      {item.nickname}
+                    </div>
+                    <div className="notice">{item.notice}</div>
+                    <Popconfirm
+                      title="确认此次操作？"
+                      onConfirm={() => onDeleteGroup(item._id)}
+                    >
+                      <Button type="primary" shape="circle" className="delete">
+                        X
+                      </Button>
+                    </Popconfirm>
+                  </Card.Grid>
+                );
+              })}
+        </Card>
+      </div>
+    );
+  };
+
   useEffect(() => {}, [tab]);
 
   return (
@@ -152,6 +210,15 @@ const GroupManageModal = () => {
           >
             添加群组
           </Button>
+          <Button
+            type="primary"
+            onClick={() => setTab("myGroup")}
+            className={classNames(
+              tab !== "myGroup" && "modal-groupManage-inactiveTab"
+            )}
+          >
+            我的群组
+          </Button>
         </div>
       }
       visible={modalKey === "groupManage"}
@@ -163,6 +230,7 @@ const GroupManageModal = () => {
     >
       {tab === "" && <CreateGroupPanel />}
       {tab === "addGroup" && <AddGroupPanel />}
+      {tab === "myGroup" && <MyGroupPanel />}
     </Modal>
   );
 };
