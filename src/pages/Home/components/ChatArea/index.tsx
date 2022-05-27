@@ -45,7 +45,7 @@ const ChatArea = (props) => {
   const onAvatorClick = async () => {
     if (receiveId) {
       const modalData = await Api.getInfo(receiveId);
-      setModal({ key: "showGroupDetail", data: modalData });
+      setModal({ key: "showDetail", data: modalData });
     }
   };
 
