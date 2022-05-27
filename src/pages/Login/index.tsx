@@ -18,7 +18,7 @@ const Login = () => {
     ];
     const validateMsg = [
       "请输入正确的手机号格式!",
-      "密码中需包含字母、数字，长度8至16位!",
+      "密码中需包含字母、数字，长度6至12位!",
     ];
     if (Feature.handleValidate(validateCon, validateMsg)) {
       const data = await Api.login(values);
